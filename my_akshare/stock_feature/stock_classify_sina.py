@@ -9,7 +9,7 @@ http://vip.stock.finance.sina.com.cn/mkt/
 import math
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 

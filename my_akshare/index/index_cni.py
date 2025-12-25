@@ -10,7 +10,7 @@ import zipfile
 from io import BytesIO
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def index_all_cni() -> pd.DataFrame:

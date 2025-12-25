@@ -7,7 +7,7 @@ http://data.eastmoney.com/zlsj/2020-06-30-1-2.html
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def stock_report_fund_hold(

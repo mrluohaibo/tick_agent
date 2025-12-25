@@ -5,7 +5,7 @@ Date: 2022/4/7 17:36
 Desc: http://kcb.sse.com.cn/renewal/#
 """
 
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 import pandas as pd
 
 # TODO

@@ -10,7 +10,7 @@ import datetime
 from typing import AnyStr
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 from my_akshare.futures.cons import (
     QHKC_FUND_BS_URL,

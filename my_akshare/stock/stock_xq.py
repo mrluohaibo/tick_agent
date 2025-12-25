@@ -10,7 +10,7 @@ import re
 from datetime import datetime
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def _convert_timestamp(timestamp_ms: int) -> str:

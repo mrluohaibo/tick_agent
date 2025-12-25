@@ -12,7 +12,7 @@ http://www.cffex.com.cn/zz1000gzqq/
 from io import BytesIO
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 from my_akshare.option.cons import (
     SH_OPTION_PAYLOAD,

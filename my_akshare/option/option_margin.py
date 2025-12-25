@@ -5,7 +5,7 @@ Date: 2025/6/16 18:00
 Desc: 唯爱期货-期权保证金
 https://www.iweiai.com/qihuo/yuanyou
 """
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 import pandas as pd
 from io import StringIO
 

@@ -7,7 +7,7 @@ http://webapi.cninfo.com.cn/#/thematicStatistics?name=%E6%8A%95%E8%B5%84%E8%AF%8
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 import py_mini_racer
 
 from my_akshare.datasets import get_ths_js

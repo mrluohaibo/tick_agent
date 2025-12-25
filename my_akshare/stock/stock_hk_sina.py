@@ -8,7 +8,7 @@ https://stock.finance.sina.com.cn/hkstock/quotes/00700.html
 
 import pandas as pd
 import py_mini_racer
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 from my_akshare.stock.cons import (
     hk_js_decode,

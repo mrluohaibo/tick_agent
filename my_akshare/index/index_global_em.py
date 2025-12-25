@@ -7,7 +7,7 @@ https://quote.eastmoney.com/center/gridlist.html#global_qtzs
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 from my_akshare.index.cons import index_global_em_symbol_map
 

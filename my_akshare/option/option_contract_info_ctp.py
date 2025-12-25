@@ -7,7 +7,7 @@ http://openctp.cn/instruments.html
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def option_contract_info_ctp() -> pd.DataFrame:

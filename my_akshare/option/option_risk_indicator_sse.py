@@ -6,7 +6,7 @@ Desc: 上海证券交易所-产品-股票期权-期权风险指标
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def option_risk_indicator_sse(date: str = "20240626") -> pd.DataFrame:

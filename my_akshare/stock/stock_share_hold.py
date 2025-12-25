@@ -14,7 +14,7 @@ https://www.sse.com.cn/disclosure/credibility/supervision/change/
 import json
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 from tqdm import tqdm
 
 

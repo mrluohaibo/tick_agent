@@ -8,7 +8,7 @@ Desc: 金十数据-其他-加密货币实时行情
 from datetime import datetime
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def crypto_js_spot() -> pd.DataFrame:

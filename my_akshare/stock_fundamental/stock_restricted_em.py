@@ -7,7 +7,7 @@ https://data.eastmoney.com/dxf/detail.html
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 from tqdm import tqdm
 
 

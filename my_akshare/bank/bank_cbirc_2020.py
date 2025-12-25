@@ -13,7 +13,7 @@ import warnings
 from io import StringIO
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 from tqdm import tqdm
 
 from my_akshare.bank.cons import cbirc_headers_without_cookie_2020

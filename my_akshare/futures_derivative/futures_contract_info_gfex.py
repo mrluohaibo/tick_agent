@@ -7,7 +7,7 @@ http://www.gfex.com.cn/gfex/hyxx/ywcs.shtml
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def futures_contract_info_gfex() -> pd.DataFrame:

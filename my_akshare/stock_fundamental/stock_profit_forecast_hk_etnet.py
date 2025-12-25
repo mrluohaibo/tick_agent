@@ -9,7 +9,7 @@ https://data.eastmoney.com/report/profitforecast.jshtml
 from io import StringIO
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def stock_hk_profit_forecast_et(

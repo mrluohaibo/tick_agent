@@ -6,7 +6,7 @@ Desc: 中国外汇交易中心暨全国银行间同业拆借中心-回购定盘�
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def repo_rate_query(symbol: str = "回购定盘利率") -> pd.DataFrame:

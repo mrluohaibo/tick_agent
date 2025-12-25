@@ -8,7 +8,7 @@ https://fundf10.eastmoney.com/jbgk_015641.html
 from io import StringIO
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def fund_overview_em(symbol: str = "015641") -> pd.DataFrame:

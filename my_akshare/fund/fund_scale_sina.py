@@ -7,7 +7,7 @@ https://vip.stock.finance.sina.com.cn/fund_center/index.html#jjgmall
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 from my_akshare.utils import demjson
 

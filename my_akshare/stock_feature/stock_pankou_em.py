@@ -7,7 +7,7 @@ https://quote.eastmoney.com/changes/
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def stock_changes_em(symbol: str = "大笔买入") -> pd.DataFrame:

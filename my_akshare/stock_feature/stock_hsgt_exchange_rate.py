@@ -12,7 +12,7 @@ import warnings
 from datetime import datetime
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def stock_sgt_settlement_exchange_rate_szse() -> pd.DataFrame:

@@ -9,7 +9,7 @@ http://www.cffex.com.cn/jycs/
 import xml.etree.ElementTree as ET
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def futures_contract_info_cffex(date: str = "20240228") -> pd.DataFrame:

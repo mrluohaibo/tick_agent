@@ -9,7 +9,7 @@ http://bond.sse.com.cn/data/statistics/overview/turnover/
 from io import BytesIO
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def bond_cash_summary_sse(date: str = "20210111") -> pd.DataFrame:

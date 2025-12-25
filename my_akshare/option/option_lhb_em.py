@@ -7,7 +7,7 @@ https://data.eastmoney.com/other/qqlhb.html
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def option_lhb_em(

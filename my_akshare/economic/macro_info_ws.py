@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def __convert_date_format(date: str) -> str:

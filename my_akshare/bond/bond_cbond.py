@@ -6,7 +6,7 @@ Desc: 中国债券信息网-中债指数-中债指数族系-总指数-综合类�
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def bond_new_composite_index_cbond(

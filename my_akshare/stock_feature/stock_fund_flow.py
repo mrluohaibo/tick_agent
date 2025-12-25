@@ -16,7 +16,7 @@ https://data.10jqka.com.cn/funds/ddzz/#refCountId=data_55f13c2c_254
 from io import StringIO
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 from bs4 import BeautifulSoup
 import py_mini_racer
 from my_akshare.utils.tqdm import get_tqdm

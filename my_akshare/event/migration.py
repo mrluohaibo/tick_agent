@@ -8,7 +8,7 @@ Desc: 百度地图慧眼-百度迁徙数据
 import json
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 from my_akshare.event.cons import province_dict, city_dict
 

@@ -9,7 +9,7 @@ https://www.szse.cn/disclosure/margin/object/index.html
 import warnings
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def stock_margin_underlying_info_szse(date: str = "20221129") -> pd.DataFrame:

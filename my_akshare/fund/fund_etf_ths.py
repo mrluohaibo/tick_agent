@@ -9,7 +9,7 @@ https://fund.10jqka.com.cn/datacenter/jz/kfs/etf/
 import json
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def fund_etf_spot_ths(date: str = "") -> pd.DataFrame:

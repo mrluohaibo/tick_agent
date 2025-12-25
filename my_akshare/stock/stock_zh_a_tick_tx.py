@@ -10,7 +10,7 @@ Desc: 腾讯-股票-实时行情-成交明细
 import warnings
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def stock_zh_a_tick_tx_js(symbol: str = "sz000001") -> pd.DataFrame:

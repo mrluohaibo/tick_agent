@@ -7,7 +7,7 @@ https://finance.sina.com.cn/futuremarket/spotprice.shtml#titlePos_0
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def spot_goods(symbol: str = "波罗的海干散货指数") -> pd.DataFrame:

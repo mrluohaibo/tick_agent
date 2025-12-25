@@ -7,7 +7,7 @@ https://www.chinascope.com/reasearch.html
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def index_news_sentiment_scope() -> pd.DataFrame:

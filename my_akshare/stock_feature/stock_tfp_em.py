@@ -7,7 +7,7 @@ https://data.eastmoney.com/tfpxx/
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def stock_tfp_em(date: str = "20240426") -> pd.DataFrame:

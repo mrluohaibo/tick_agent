@@ -7,7 +7,7 @@ https://guba.eastmoney.com/rank/
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def stock_hk_hot_rank_em() -> pd.DataFrame:

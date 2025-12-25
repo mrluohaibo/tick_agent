@@ -9,7 +9,7 @@ https://stock.eastmoney.com/a/czpnc.html
 from datetime import datetime
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 from my_akshare.request import make_request_with_retry_json
 from my_akshare.utils.cons import headers

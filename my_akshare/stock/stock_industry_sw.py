@@ -9,7 +9,7 @@ http://www.swhyresearch.com/institute_sw/allIndex/downloadCenter/industryType
 import io
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 from my_akshare.utils.cons import headers
 

@@ -11,7 +11,7 @@ https://www.chinamoney.com.cn/chinese/mkdatabond/
 from io import StringIO
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 from my_akshare.bond.bond_china_money import bond_china_close_return_map
 from my_akshare.utils.cons import headers

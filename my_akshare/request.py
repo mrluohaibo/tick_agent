@@ -22,7 +22,7 @@ def make_request_with_retry_json(
     :return: 解析后的 JSON 数据
     """
     if proxies is None:
-        proxies = config.proxies
+        proxies = config.get_proxies()
     for attempt in range(max_retries):
         try:
             response = requests.get(
@@ -77,7 +77,7 @@ def make_request_with_retry_text(
     :return: 解析后的 JSON 数据
     """
     if proxies is None:
-        proxies = config.proxies
+        proxies = config.get_proxies()
     for attempt in range(max_retries):
         try:
             response = requests.get(

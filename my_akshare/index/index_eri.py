@@ -7,7 +7,7 @@ https://zs.zjpwq.net/
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def index_eri(symbol: str = "月度") -> pd.DataFrame:

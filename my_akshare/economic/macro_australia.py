@@ -7,7 +7,7 @@ https://data.eastmoney.com/cjsj/foreign_5_0.html
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 # 零售销售月率

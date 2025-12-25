@@ -6,7 +6,7 @@ Desc: 东方财富-德国-经济数据
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def macro_germany_core(symbol: str = "EMG00179154") -> pd.DataFrame:

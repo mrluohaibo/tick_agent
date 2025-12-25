@@ -9,7 +9,7 @@ https://vip.stock.finance.sina.com.cn/q/go.php/vComStockHold/kind/jgcg/index.pht
 from io import StringIO
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 from my_akshare.utils import demjson
 

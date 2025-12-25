@@ -9,7 +9,7 @@ https://www.futunn.com/quote/sparks-us
 import json
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 from bs4 import BeautifulSoup
 
 

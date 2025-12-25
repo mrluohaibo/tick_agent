@@ -6,7 +6,7 @@ Desc: 东方财富-A股数据-股本结构
 https://emweb.securities.eastmoney.com/pc_hsf10/pages/index.html?type=web&code=SH603392&color=b#/gbjg/gbjg
 """
 
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 import pandas as pd
 
 

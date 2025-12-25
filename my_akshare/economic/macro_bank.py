@@ -22,7 +22,7 @@ import datetime
 import time
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def __get_interest_rate_data(attr_id: str, name: str = "利率") -> pd.DataFrame:

@@ -7,7 +7,7 @@ https://stock.finance.sina.com.cn/usstock/quotes/.IXIC.html
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 import py_mini_racer
 
 from my_akshare.stock.cons import (

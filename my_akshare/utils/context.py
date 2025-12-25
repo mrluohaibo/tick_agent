@@ -1,5 +1,9 @@
+from my_akshare.utils.qg_ip_proxy_tool import QingguoProxyIp
+
+
 class AkshareConfig:
     _instance = None
+    useProxy = False
 
     def __new__(cls):
         if cls._instance is None:
@@ -13,7 +17,18 @@ class AkshareConfig:
 
     @classmethod
     def get_proxies(cls):
-        return cls().proxies
+        if AkshareConfig.useProxy:
+            proxy_ip_port = QingguoProxyIp().random_proxy_ip_port()
+        else:
+            proxy_ip_port = None
+
+        proxies = None
+        if proxy_ip_port is not None:
+            proxies = {
+                "http": f"http://{proxy_ip_port}"
+            }
+        set_proxies(proxies)
+        return proxies
 
 
 config = AkshareConfig()
@@ -34,10 +49,10 @@ class ProxyContext:
         self.old_proxies = None
 
     def __enter__(self):
-        self.old_proxies = config.get_proxies()
+        self.proxies = config.get_proxies()
         config.set_proxies(self.proxies)
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        config.set_proxies(self.old_proxies)
+        config.set_proxies(None)
         return False  # 不处理异常

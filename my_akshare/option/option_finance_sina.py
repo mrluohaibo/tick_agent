@@ -17,7 +17,7 @@ from functools import lru_cache
 from typing import Dict, List, Tuple
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 from bs4 import BeautifulSoup
 
 from my_akshare.option.option_em import option_current_em

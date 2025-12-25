@@ -9,7 +9,7 @@ https://basic.10jqka.com.cn/new/600519/worth.html
 from io import StringIO
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 from my_akshare.utils.cons import headers
 

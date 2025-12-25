@@ -7,7 +7,7 @@ https://data.eastmoney.com/gdhs/
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 from my_akshare.utils.tqdm import get_tqdm
 

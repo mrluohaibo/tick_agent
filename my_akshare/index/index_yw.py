@@ -12,7 +12,7 @@ Desc: 义乌小商品指数
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def index_yw(symbol: str = "月景气指数") -> pd.DataFrame:

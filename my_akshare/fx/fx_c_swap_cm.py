@@ -9,7 +9,7 @@ https://www.chinamoney.org.cn/chinese/bkcurvfsw
 import ssl
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 from requests.adapters import HTTPAdapter
 
 

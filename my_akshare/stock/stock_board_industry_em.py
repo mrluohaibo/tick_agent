@@ -10,7 +10,7 @@ import re
 from functools import lru_cache
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 from my_akshare.utils.func import fetch_paginated_data
 

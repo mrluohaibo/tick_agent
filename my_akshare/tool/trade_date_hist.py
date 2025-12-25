@@ -10,7 +10,7 @@ https://finance.sina.com.cn/realstock/company/klc_td_sh.txt
 import datetime
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 import py_mini_racer
 
 from my_akshare.stock.cons import hk_js_decode

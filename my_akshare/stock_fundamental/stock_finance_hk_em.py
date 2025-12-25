@@ -7,7 +7,7 @@ https://emweb.securities.eastmoney.com/PC_HKF10/FinancialAnalysis/index?type=web
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def stock_financial_hk_report_em(

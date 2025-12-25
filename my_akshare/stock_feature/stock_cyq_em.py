@@ -10,7 +10,7 @@ from datetime import datetime
 
 import pandas as pd
 import py_mini_racer
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def stock_cyq_em(symbol: str = "000001", adjust: str = "") -> pd.DataFrame:

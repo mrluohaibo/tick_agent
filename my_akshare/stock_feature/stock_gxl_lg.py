@@ -7,7 +7,7 @@ https://legulegu.com/stockdata/guxilv
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 from my_akshare.stock_feature.stock_a_indicator import get_token_lg, get_cookie_csrf
 

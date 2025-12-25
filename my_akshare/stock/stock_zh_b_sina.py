@@ -11,7 +11,7 @@ import re
 from functools import lru_cache
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 import py_mini_racer
 
 from my_akshare.stock.cons import (

@@ -10,7 +10,7 @@ import warnings
 from functools import lru_cache
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 from bs4 import BeautifulSoup
 
 from my_akshare.utils.tqdm import get_tqdm

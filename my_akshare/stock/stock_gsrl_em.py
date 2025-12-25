@@ -7,7 +7,7 @@ https://data.eastmoney.com/gsrl/gsdt.html
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def stock_gsrl_gsdt_em(date: str = "20230808") -> pd.DataFrame:

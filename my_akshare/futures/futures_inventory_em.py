@@ -7,7 +7,7 @@ https://data.eastmoney.com/ifdata/kcsj.html
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 from my_akshare.futures.cons import futures_inventory_em_symbol_dict
 
 

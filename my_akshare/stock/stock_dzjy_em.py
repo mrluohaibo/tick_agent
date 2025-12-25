@@ -7,7 +7,7 @@ https://data.eastmoney.com/dzjy/
 """
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 
 
 def stock_dzjy_sctj() -> pd.DataFrame:

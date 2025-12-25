@@ -24,7 +24,7 @@ from io import BytesIO
 from io import StringIO
 
 import pandas as pd
-import requests
+from my_akshare.utils.my_request import request_proxy as requests
 from bs4 import BeautifulSoup
 
 from my_akshare.futures import cons
