@@ -21,7 +21,7 @@ from pathlib import Path
 from .properties import Properties
 current_file = Path(__file__).resolve()
 
-root_path = current_file.parent.parent.parent  # 当前项目路径
+root_path = current_file.parent.parent  # 当前项目路径
 log_path = os.path.join(root_path, 'logs')  # log_path为存放日志的路径
 if not os.path.exists(log_path): os.mkdir(log_path)  # 若不存在logs文件夹，则自动创建
 
