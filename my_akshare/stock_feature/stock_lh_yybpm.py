@@ -9,7 +9,7 @@ https://data.10jqka.com.cn/market/longhu/
 from io import StringIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 from bs4 import BeautifulSoup
 
 from my_akshare.utils.tqdm import get_tqdm

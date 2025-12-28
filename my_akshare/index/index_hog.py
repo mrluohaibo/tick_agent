@@ -7,7 +7,7 @@ https://hqb.nxin.com/pigindex/index.shtml
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def index_hog_spot_price() -> pd.DataFrame:

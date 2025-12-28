@@ -12,7 +12,7 @@ import time
 from functools import lru_cache
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 import py_mini_racer
 
 from my_akshare.futures.cons import (

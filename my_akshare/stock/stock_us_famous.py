@@ -7,7 +7,7 @@ https://quote.eastmoney.com/center/gridlist.html#us_wellknown
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def stock_us_famous_spot_em(symbol: str = "科技类") -> pd.DataFrame:

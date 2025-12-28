@@ -7,7 +7,7 @@ Desc: 中国证券投资基金业协会-信息公示数据
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 from my_akshare.utils.tqdm import get_tqdm
 

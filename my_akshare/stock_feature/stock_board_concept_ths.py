@@ -12,7 +12,7 @@ from functools import lru_cache
 from io import StringIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 from bs4 import BeautifulSoup
 import py_mini_racer
 

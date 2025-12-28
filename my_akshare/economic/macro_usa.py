@@ -10,7 +10,7 @@ import datetime
 import time
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def __macro_usa_base_func(symbol: str, params: dict) -> pd.DataFrame:

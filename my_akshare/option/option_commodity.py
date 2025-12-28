@@ -19,7 +19,7 @@ import warnings
 from io import StringIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 from my_akshare.option.cons import (
     get_calendar,

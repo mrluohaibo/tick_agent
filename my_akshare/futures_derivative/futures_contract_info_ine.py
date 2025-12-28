@@ -7,7 +7,7 @@ https://www.ine.cn/bourseService/summary/?name=currinstrumentprop
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def futures_contract_info_ine(date: str = "20241129") -> pd.DataFrame:

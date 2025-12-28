@@ -9,7 +9,7 @@ https://quote.eastmoney.com/f1.html?newcode=0.000001
 import json
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def __event_stream(url, params):

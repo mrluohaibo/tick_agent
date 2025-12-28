@@ -9,7 +9,7 @@ import warnings
 from io import BytesIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def index_csindex_all() -> pd.DataFrame:

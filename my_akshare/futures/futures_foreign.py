@@ -10,7 +10,7 @@ from datetime import datetime
 from io import StringIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 from my_akshare.futures.futures_hq_sina import (
     futures_foreign_commodity_subscribe_exchange_symbol,

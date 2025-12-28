@@ -7,7 +7,7 @@ https://datacenter.jin10.com/reportType/dc_cme_btc_report
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def crypto_bitcoin_cme(date: str = "20230830") -> pd.DataFrame:

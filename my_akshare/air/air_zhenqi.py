@@ -14,7 +14,7 @@ import re
 from io import StringIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 from py_mini_racer import MiniRacer
 
 from my_akshare.utils import demjson

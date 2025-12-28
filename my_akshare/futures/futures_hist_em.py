@@ -11,7 +11,7 @@ from functools import lru_cache
 from typing import Tuple, Dict
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def __futures_hist_separate_char_and_numbers_em(symbol: str = "焦煤2506") -> tuple:

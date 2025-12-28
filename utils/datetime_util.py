@@ -7,3 +7,10 @@ class DateTimeUtil(object):
         now = datetime.now()
         parsed_time = now.strftime( "%Y-%m-%d %H:%M:%S")
         return parsed_time
+
+
+    @staticmethod
+    def now_time_yyyy_mm_dd():
+        now = datetime.now()
+        parsed_time = now.strftime( "%Y-%m-%d")
+        return parsed_time

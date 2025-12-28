@@ -7,7 +7,7 @@ Desc: 深圳证券交易所-期权子网-行情数据-当日合约
 from io import BytesIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def option_current_day_szse() -> pd.DataFrame:

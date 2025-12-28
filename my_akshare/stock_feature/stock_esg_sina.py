@@ -10,7 +10,7 @@ import math
 from my_akshare.utils.tqdm import get_tqdm
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def stock_esg_msci_sina() -> pd.DataFrame:

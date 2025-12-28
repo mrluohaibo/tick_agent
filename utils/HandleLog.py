@@ -15,13 +15,12 @@ import os
 import colorlog
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
-from pathlib import Path
 
-
+from bz_core.Constant import root_path
 from .properties import Properties
-current_file = Path(__file__).resolve()
 
-root_path = current_file.parent.parent  # 当前项目路径
+
+
 log_path = os.path.join(root_path, 'logs')  # log_path为存放日志的路径
 if not os.path.exists(log_path): os.mkdir(log_path)  # 若不存在logs文件夹，则自动创建
 
@@ -57,13 +56,28 @@ class HandleLog:
         self.properties = properties
 
         self.__now_time = datetime.now().strftime('%Y-%m-%d')  # 当前日期格式化
-        self.__all_log_path = self.properties['log.file.debug'].format(date=date_now)   # debug
-        self.__error_log_path = self.properties['log.file.error'].format(date=date_now)  # 收集错误日志信息文件
-        self.__info_log_path = self.properties['log.file.info'].format(date=date_now) # info
+        self.__all_log_path = os.path.join(root_path,self.properties['log.file.debug'].format(date=date_now))   # debug
+        self.__error_log_path = os.path.join(root_path,self.properties['log.file.error'].format(date=date_now))  # 收集错误日志信息文件
+        self.__info_log_path = os.path.join(root_path,self.properties['log.file.info'].format(date=date_now)) # info
 
         self.__logger = logging.getLogger()  # 创建日志记录器
-        self.__logger.setLevel(logging.DEBUG)  # 设置默认日志记录器记录级别
+        self.__logger.setLevel(self.properties['log.level'])  # 设置默认日志记录器记录级别
 
+
+
+    def init_current_all_path(self):
+        date_now = datetime.now().strftime('%Y-%m-%d') # 当前日期格式化
+        __all_log_path = os.path.join(root_path, self.properties['log.file.debug'].format(date=date_now))  # debug
+        __error_log_path = os.path.join(root_path,self.properties['log.file.error'].format(date=date_now))  # 收集错误日志信息文件
+        __info_log_path = os.path.join(root_path, self.properties['log.file.info'].format(date=date_now))  # info
+        if not os.path.exists(__all_log_path):
+            self.__all_log_path =  __all_log_path
+
+        if not os.path.exists(__error_log_path):
+            self.__error_log_path =  __error_log_path
+
+        if not os.path.exists(__info_log_path):
+            self.__info_log_path =  __info_log_path
 
 
 
@@ -133,6 +147,8 @@ class HandleLog:
     def __console(self, level, message):
         """构造日志收集器"""
         max_mb = int(self.properties['log.file.max_mb'])
+        self.init_current_all_path()
+
         all_logger_handler = self.__init_logger_handler(self.__all_log_path,max_mb)  # 创建日志文件
         error_logger_handler = self.__init_logger_handler(self.__error_log_path,max_mb)
         info_logger_handler = self.__init_logger_handler(self.__info_log_path,max_mb)

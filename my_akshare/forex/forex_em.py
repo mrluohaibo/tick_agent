@@ -7,7 +7,7 @@ https://quote.eastmoney.com/center/gridlist.html#forex_all
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 from my_akshare.forex.cons import symbol_market_map
 from my_akshare.utils.func import fetch_paginated_data

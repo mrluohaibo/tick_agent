@@ -7,7 +7,7 @@ https://xueqiu.com/snowman/S/SH601127/detail#/GSJJ
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 from my_akshare.utils.cons import headers
 

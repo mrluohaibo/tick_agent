@@ -7,7 +7,7 @@ https://tsite.shfe.com.cn/bourseService/businessdata/summaryinquiry/
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def futures_contract_info_shfe(date: str = "20240513") -> pd.DataFrame:

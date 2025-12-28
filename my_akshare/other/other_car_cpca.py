@@ -7,7 +7,7 @@ http://data.cpcadata.com/FuelMarket
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def car_market_total_cpca(

@@ -7,7 +7,7 @@ http://ss.kqindex.cn:9559/rinder_web_kqsszs/index/index_page.do
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def index_kq_fashion(symbol: str = "时尚创意指数") -> pd.DataFrame:

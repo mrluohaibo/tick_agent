@@ -17,7 +17,7 @@ import re
 from io import BytesIO, StringIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def futures_warehouse_receipt_czce(date: str = "20251103") -> dict:

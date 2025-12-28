@@ -7,7 +7,7 @@ https://emweb.securities.eastmoney.com/pc_hsf10/pages/index.html?type=web&code=0
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def stock_zh_growth_comparison_em(symbol: str = "SZ000895") -> pd.DataFrame:

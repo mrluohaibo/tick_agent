@@ -7,7 +7,7 @@ http://www.sse.com.cn/assortment/options/disclo/preinfo/
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def option_current_day_sse() -> pd.DataFrame:

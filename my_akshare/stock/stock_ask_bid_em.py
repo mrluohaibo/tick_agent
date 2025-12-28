@@ -7,7 +7,7 @@ https://quote.eastmoney.com/sz000001.html
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def stock_bid_ask_em(symbol: str = "000001") -> pd.DataFrame:

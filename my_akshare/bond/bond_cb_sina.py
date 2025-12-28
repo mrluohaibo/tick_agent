@@ -9,7 +9,7 @@ https://money.finance.sina.com.cn/bond/info/sz128039.html
 from io import StringIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def bond_cb_profile_sina(symbol: str = "sz128039") -> pd.DataFrame:

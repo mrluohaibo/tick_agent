@@ -7,7 +7,7 @@ https://www.szse.cn/disclosure/margin/object/index.html
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 from my_akshare.utils.tqdm import get_tqdm
 

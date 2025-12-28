@@ -9,7 +9,7 @@ https://stockpage.10jqka.com.cn/HK0700/bonus/
 from io import StringIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def stock_hk_fhpx_detail_ths(symbol: str = "0700") -> pd.DataFrame:

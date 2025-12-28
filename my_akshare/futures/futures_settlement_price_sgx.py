@@ -12,7 +12,7 @@ from io import BytesIO
 from io import StringIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def __fetch_ftse_index_futu(date: str = "20231108") -> int:

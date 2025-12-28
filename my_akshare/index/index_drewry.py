@@ -8,7 +8,7 @@ https://infogram.com/world-container-index-1h17493095xl4zj
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 from bs4 import BeautifulSoup
 
 from my_akshare.utils import demjson

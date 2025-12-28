@@ -1,6 +1,7 @@
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 import json
 import traceback
+import logging as logger
 
 
 # 青果代理

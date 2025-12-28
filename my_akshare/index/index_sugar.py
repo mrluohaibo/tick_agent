@@ -6,7 +6,7 @@ Desc: 沐甜科技数据中心-中国食糖指数
 https://www.msweet.com.cn/mtkj/sjzx13/index.html
 """
 
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 import pandas as pd
 
 

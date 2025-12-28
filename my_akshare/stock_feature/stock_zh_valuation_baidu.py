@@ -7,7 +7,7 @@ https://gushitong.baidu.com/stock/ab-002044
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def stock_zh_valuation_baidu(

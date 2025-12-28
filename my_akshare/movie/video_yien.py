@@ -13,7 +13,7 @@ import json
 import os
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 import py_mini_racer
 
 

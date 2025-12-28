@@ -7,7 +7,7 @@ https://quote.eastmoney.com/center/gridlist.html#hk_wellknown
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def stock_hk_famous_spot_em() -> pd.DataFrame:

@@ -8,7 +8,7 @@ Desc: 东方财富-基金
 from io import StringIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def fund_aum_em() -> pd.DataFrame:

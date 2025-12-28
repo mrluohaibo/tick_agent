@@ -18,7 +18,7 @@ https://quote.eastmoney.com/ztb/detail#type=ztgc
 from datetime import datetime, timedelta
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def stock_zt_pool_em(date: str = "20241008") -> pd.DataFrame:

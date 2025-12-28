@@ -9,7 +9,7 @@ https://quote.eastmoney.com/sh513500.html
 from functools import lru_cache
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 from my_akshare.utils.func import fetch_paginated_data
 

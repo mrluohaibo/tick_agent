@@ -7,7 +7,7 @@ https://www.csindex.com.cn/zh-CN/indices/index-detail/H30374#/indices/family/lis
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def stock_zh_index_hist_csindex(

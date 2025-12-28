@@ -9,7 +9,7 @@ https://www.timeanddate.com
 from io import StringIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def sunrise_city_list() -> list:

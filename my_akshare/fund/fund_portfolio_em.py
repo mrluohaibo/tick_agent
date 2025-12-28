@@ -9,7 +9,7 @@ https://fundf10.eastmoney.com/ccmx_000001.html
 from io import StringIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 from bs4 import BeautifulSoup
 
 from my_akshare.utils import demjson

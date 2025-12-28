@@ -7,7 +7,7 @@ http://data.eastmoney.com/other/qsjy.html
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def stock_qsjy_em(date: str = "20200731") -> pd.DataFrame:

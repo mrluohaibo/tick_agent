@@ -7,7 +7,7 @@ https://data.eastmoney.com/cjsj/foreign_5_0.html
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 # 新屋开工

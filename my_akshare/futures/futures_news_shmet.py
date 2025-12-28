@@ -7,7 +7,7 @@ https://www.shmet.com/newsFlash/newsFlash.html?searchKeyword=
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def futures_news_shmet(symbol: str = "全部") -> pd.DataFrame:

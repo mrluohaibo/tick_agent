@@ -8,7 +8,7 @@ Desc: 债券-集思录-可转债
 
 from io import StringIO
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 import time
 
 from my_akshare.utils import demjson

@@ -7,7 +7,7 @@ https://data.eastmoney.com/cjsj/foreign_4_0.html
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def macro_uk_core(symbol: str = "EMG00010348") -> pd.DataFrame:

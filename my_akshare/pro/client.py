@@ -9,7 +9,7 @@ from functools import partial
 from urllib import parse
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 class DataApi:

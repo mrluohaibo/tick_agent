@@ -7,7 +7,7 @@ https://www.swsresearch.com/institute_sw/allIndex/releasedIndex
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 from my_akshare.utils.cons import headers
 

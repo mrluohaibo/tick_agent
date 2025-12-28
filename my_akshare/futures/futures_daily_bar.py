@@ -13,7 +13,7 @@ from io import BytesIO, StringIO
 
 import numpy as np
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 from my_akshare.futures import cons
 from my_akshare.futures.requests_fun import requests_link

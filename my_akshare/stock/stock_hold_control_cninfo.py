@@ -13,7 +13,7 @@ import datetime
 
 import pandas as pd
 import py_mini_racer
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 from my_akshare.datasets import get_ths_js
 

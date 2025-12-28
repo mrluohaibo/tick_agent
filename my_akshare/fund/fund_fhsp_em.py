@@ -7,7 +7,7 @@ https://fund.eastmoney.com/data/fundfenhong.html
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 from tqdm import tqdm
 
 

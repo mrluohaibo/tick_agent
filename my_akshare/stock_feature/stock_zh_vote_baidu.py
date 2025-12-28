@@ -6,7 +6,7 @@ Desc: 百度股市通- A 股或指数-股评-投票
 https://gushitong.baidu.com/index/ab-000001
 """
 
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 import pandas as pd
 
 

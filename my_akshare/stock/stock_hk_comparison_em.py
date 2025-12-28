@@ -7,7 +7,7 @@ https://emweb.securities.eastmoney.com/PC_HKF10/pages/home/index.html?code=03900
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def stock_hk_growth_comparison_em(symbol: str = "03900") -> pd.DataFrame:

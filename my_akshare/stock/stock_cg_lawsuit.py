@@ -9,7 +9,7 @@ http://webapi.cninfo.com.cn/#/thematicStatistics
 import time
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 import py_mini_racer
 
 js_str = """

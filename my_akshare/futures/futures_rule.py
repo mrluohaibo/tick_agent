@@ -9,7 +9,7 @@ https://www.gtjaqh.com/pc/calendar.html
 from io import StringIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def futures_rule(date: str = "20231205") -> pd.DataFrame:

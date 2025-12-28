@@ -7,7 +7,7 @@ https://legulegu.com/stockdata/equity-bond-spread
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 from my_akshare.stock_feature.stock_a_indicator import get_token_lg, get_cookie_csrf
 

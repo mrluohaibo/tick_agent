@@ -10,7 +10,7 @@ import re
 
 from my_akshare.utils import demjson
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 from tqdm import tqdm
 
 from my_akshare.stock.cons import (

@@ -9,7 +9,7 @@ Desc: 奇货可查网站目前已经商业化运营, 特提供奇货可查-指�
 from typing import AnyStr
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 from my_akshare.futures.cons import (
     QHKC_INDEX_URL,

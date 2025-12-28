@@ -9,7 +9,7 @@ https://vip.stock.finance.sina.com.cn/q/view/vFutures_Positions_cjcc.php
 from io import StringIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def futures_hold_pos_sina(

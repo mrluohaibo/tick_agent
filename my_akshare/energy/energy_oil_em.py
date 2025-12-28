@@ -7,7 +7,7 @@ https://data.eastmoney.com/cjsj/oil_default.html
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def energy_oil_hist() -> pd.DataFrame:

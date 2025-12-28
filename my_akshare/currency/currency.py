@@ -8,7 +8,7 @@ https://currencyscoop.com/
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def currency_latest(

@@ -7,7 +7,7 @@ https://finance.sina.com.cn/stock/globalindex/quotes/UKX
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 from my_akshare.index.cons import index_global_sina_symbol_map
 

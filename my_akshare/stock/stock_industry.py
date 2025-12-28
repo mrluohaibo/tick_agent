@@ -10,7 +10,7 @@ import json
 import math
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 from my_akshare.utils import demjson
 from tqdm import tqdm

@@ -8,7 +8,7 @@ https://www.ownthink.com/docs/kg/
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def nlp_ownthink(word: str = "人工智能", indicator: str = "entity") -> pd.DataFrame:

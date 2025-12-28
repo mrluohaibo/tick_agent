@@ -9,7 +9,7 @@ http://www.xcf.cn/zhuanti/ztzz/hdzt1/500frb/index.html
 import json
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def xincaifu_rank(year: str = "2022") -> pd.DataFrame:

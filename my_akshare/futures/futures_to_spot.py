@@ -8,7 +8,7 @@ Desc: 期货-期转现-交割
 from io import StringIO, BytesIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def futures_to_spot_shfe(date: str = "202312") -> pd.DataFrame:

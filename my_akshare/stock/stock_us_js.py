@@ -6,7 +6,7 @@ Desc: 美股目标价 or 港股目标价
 https://www.ushknews.com/report.html
 """
 
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 import pandas as pd
 
 

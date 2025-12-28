@@ -14,7 +14,7 @@ import time
 from typing import Dict
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def stock_js_weibo_nlp_time() -> Dict:

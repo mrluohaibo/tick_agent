@@ -7,7 +7,7 @@ https://quote.eastmoney.com/concept/sh603777.html?from=classic
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def stock_individual_info_em(

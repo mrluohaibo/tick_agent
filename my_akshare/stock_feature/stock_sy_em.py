@@ -11,7 +11,7 @@ Desc: 东方财富网-数据中心-特色数据-商誉
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 from my_akshare.utils.tqdm import get_tqdm
 

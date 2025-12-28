@@ -8,7 +8,7 @@ https://data.eastmoney.com/cjsj/gpkhsj.html
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def stock_account_statistics_em() -> pd.DataFrame:

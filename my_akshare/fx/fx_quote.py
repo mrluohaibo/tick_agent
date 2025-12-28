@@ -11,7 +11,7 @@ Desc: 中国外汇交易中心暨全国银行间同业拆借中心-市场数据-
 import time
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 from my_akshare.fx.cons import (
     SHORT_HEADERS,

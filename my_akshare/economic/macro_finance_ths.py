@@ -8,7 +8,7 @@ https://data.10jqka.com.cn/macro/finance/
 from io import StringIO
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def macro_stock_finance() -> pd.DataFrame:

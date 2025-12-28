@@ -7,7 +7,7 @@ https://datacenter.jin10.com/dc_report?name=bitcoint
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def crypto_bitcoin_hold_report():

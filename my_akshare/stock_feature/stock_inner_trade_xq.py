@@ -7,7 +7,7 @@ https://xueqiu.com/hq/insider
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def stock_inner_trade_xq() -> pd.DataFrame:

@@ -11,7 +11,7 @@ https://help.1234567.com.cn/list_236.html
 from datetime import datetime, date
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 from my_akshare.utils import demjson
 

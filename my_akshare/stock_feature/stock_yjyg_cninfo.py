@@ -7,7 +7,7 @@ http://www.cninfo.com.cn/new/commonUrl?url=data/yypl
 """
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def stock_report_disclosure(

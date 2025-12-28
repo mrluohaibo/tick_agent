@@ -9,7 +9,7 @@ https://fundf10.eastmoney.com/jjgg_000001.html
 import time
 
 import pandas as pd
-from my_akshare.utils.my_request import request_proxy as requests
+import requests
 
 
 def fund_announcement_dividend_em(symbol: str = "000001") -> pd.DataFrame:
