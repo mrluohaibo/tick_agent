@@ -9,6 +9,8 @@ https://quote.eastmoney.com/concept/sh603777.html?from=classic
 import pandas as pd
 import requests
 
+from my_akshare.request import make_request_with_retry_json
+
 
 def stock_individual_info_em(
     symbol: str = "603777", timeout: float = None
@@ -37,8 +39,8 @@ def stock_individual_info_em(
         "f275,f276,f265,f266,f289,f290,f286,f285,f292,f293,f294,f295,f43",
         "secid": f"{market_code}.{symbol}",
     }
-    r = requests.get(url, params=params, timeout=timeout)
-    data_json = r.json()
+    # r = requests.get(url, params=params, timeout=timeout)
+    data_json = make_request_with_retry_json(url, params=params)
     temp_df = pd.DataFrame(data_json)
     temp_df.reset_index(inplace=True)
     del temp_df["rc"]

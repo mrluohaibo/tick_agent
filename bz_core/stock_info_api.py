@@ -1,4 +1,5 @@
 import os
+import time
 
 import my_akshare as ak
 import pandas as pd
@@ -17,12 +18,21 @@ class StockInfo():
         self.stock_db_name =  "all_stock_basic"
 
 
-    def get_all_stock_info(self):
 
+    def get_all_stock_info(self):
+        '''
+        获取实时全股票数据
+        :return:
+        '''
+        timestamp_before = time.time()*1000
         stock_zh_a_spot_em_df = ak.stock_zh_a_spot_em()
-        excel_save_file = self.join_path(Constant.root_path,"temp_file_save/last_stock_info.xlsx")
+        logger.info(f" get stock all info spend {time.time()*1000 - timestamp_before} ms")
+        date_str = DateTimeUtil.now_time_yyyymmdd()
+        excel_save_file = self.join_path(Constant.root_path,f"temp_file_save/last_stock_info_{date_str}.xlsx")
         stock_zh_a_spot_em_df.to_excel(excel_save_file, index=False)
+        timestamp_before = time.time() * 1000
         self.handle_stock_pd_data(stock_zh_a_spot_em_df)
+        logger.info(f" save stock all info to db spend {time.time() * 1000 - timestamp_before} ms")
         # print(stock_zh_a_spot_em_df)
 
 
@@ -70,13 +80,19 @@ class StockInfo():
         self.insert_stock_info_2_mongo(all_data)
 
     def insert_stock_info_2_mongo(self,all_data):
+        '''
+        每天盘后将最新数据更新到全局股票表中
+        :param all_data:
+        :return:
+        '''
         for per_row in all_data:
             unique_stock_code = per_row["stock_code"]
             query = {"stock_code": unique_stock_code}
             match_doc = mongo_client.find_one(self.stock_db_name,query=query)
             if match_doc is not None:
                 per_row["update_time"] = DateTimeUtil.now_time_yyyy_mm_dd_hh_mm_ss()
-                mongo_client.update_one(self.stock_db_name,query=query, update={"$set":per_row})
+                update_num = mongo_client.update_one(self.stock_db_name,query=query, update={"$set":per_row})
+                logger.info(f"stock {unique_stock_code} update {update_num}")
             else:
                 per_row["create_time"] = DateTimeUtil.now_time_yyyy_mm_dd_hh_mm_ss()
                 mongo_client.insert_one(self.stock_db_name,per_row)
@@ -93,19 +109,76 @@ class StockInfo():
 
 
     def parse_xlsx_to_pd(self):
-        excel_save_file = self.join_path(Constant.root_path, "temp_file_save/last_stock_info.xlsx")
+        date_str = DateTimeUtil.now_time_yyyymmdd()
+        excel_save_file = self.join_path(Constant.root_path, f"temp_file_save/last_stock_info_{date_str}.xlsx")
         df = pd.read_excel(excel_save_file)
         self.handle_stock_pd_data(df)
-        print(df)
 
     def join_path(self,a,b):
         return os.path.join(a,b)
 
 
+    def update_stock_industry(self):
+        '''
+         获取每只股票的行业
+         并将行业形成字典表进行保存
+         低频更新，基本可以一个一天更新一次就行了
+        :return:
+        '''
+        # 分页获取 股票信息 1229 2124 更新的id
+        last_id = "69526884c52c75ee51f9311c"
+        page_size = 1000
+        match_doc = mongo_client.get_cursor_paginated_data(self.stock_db_name,query={},last_id = last_id ,page_size = page_size)
+        while len(match_doc) > 0:
+            last_id = match_doc[-1]["_id"]
+            stock_code_list = [item["stock_code"] for item in match_doc]
+            self.update_industry_stock(stock_code_list)
+            if len(match_doc) < page_size:
+                break
+            else:
+                match_doc = mongo_client.get_cursor_paginated_data(self.stock_db_name,query={},last_id = last_id ,page_size = page_size)
+
+
+    def update_industry_stock(self, stock_code_list):
+        '''
+
+        :param stock_code_list:
+        :return:
+        '''
+        if len(stock_code_list) > 0:
+            for stock_code in stock_code_list:
+                stock_individual_info_em_df = ak.stock_individual_info_em(symbol=stock_code)
+                if stock_individual_info_em_df is not None:
+                    stock_info = {}
+                    has_data = False
+                    for index, row in stock_individual_info_em_df.iterrows():
+                        item_name = row["item"]
+                        item_value = row["value"]
+                        if item_name in ['行业','上市时间','总股本','流通股']:
+                            head_name_en = self.get_en_code_of_zh(item_name)
+                            if not StringUtil.is_empty(head_name_en):
+                                stock_info[head_name_en] = item_value
+                                if not has_data:
+                                    has_data = True
+
+                    if has_data:
+                        self.update_stock_other_info(stock_code,stock_info)
+
+
+
+    def update_stock_other_info(self, stock_code, stock_info):
+        query = {"stock_code": stock_code}
+        match_doc = mongo_client.find_one(self.stock_db_name, query=query)
+        if match_doc is not None:
+            stock_info["update_time"] = DateTimeUtil.now_time_yyyy_mm_dd_hh_mm_ss()
+            update_num = mongo_client.update_one(self.stock_db_name, query=query, update={"$set": stock_info})
+            logger.info(f"stock {stock_code} other info update {update_num}")
+        else:
+            logger.error(f"stock {stock_code} not exist,is impossible")
 
 
 if __name__ == "__main__":
 
     stock_info = StockInfo()
-    stock_info.parse_xlsx_to_pd()
-    logger.info("ok!!!")
+    stock_info.update_stock_industry()
+    logger.info("-------------ok!!!-------------------------")

@@ -127,6 +127,40 @@ class MongoManager:
             results.append(doc)
         return results
 
+    def get_paginated_data(self,
+                           collection: str,
+                           query: Optional[Dict[str, Any]] ,
+                           page: int,
+                           page_size: int):
+        """
+        分页查询数据
+        :param page: 页码（从1开始）
+        :param page_size: 每页数量
+        :return: 当前页的数据列表
+        """
+        skip = (page - 1) * page_size
+        cursor = self.get_collection(collection).find(filter=query or {},).skip(skip).limit(page_size)
+        return list(cursor)
+
+    def get_cursor_paginated_data(self,
+                               collection: str,
+                               query: Optional[Dict[str, Any]] ,
+                               last_id: str,
+                               page_size: int = 10):
+        """
+        使用 _id 游标分页（假设 _id 是 ObjectId）
+        :param last_id: 上一页最后一个文档的 _id（字符串形式）
+        :param page_size: 每页数量
+        :return: 当前页数据
+        """
+        from bson import ObjectId
+
+        if last_id:
+            query['_id'] = {'$gt': ObjectId(last_id)}
+
+        cursor = self.get_collection(collection).find(filter=query or {},).sort('_id', 1).limit(page_size)
+        return list(cursor)
+
     def update_one(
             self,
             collection: str,

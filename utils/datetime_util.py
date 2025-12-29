@@ -14,3 +14,9 @@ class DateTimeUtil(object):
         now = datetime.now()
         parsed_time = now.strftime( "%Y-%m-%d")
         return parsed_time
+
+    @staticmethod
+    def now_time_yyyymmdd():
+        now = datetime.now()
+        parsed_time = now.strftime("%Y%m%d")
+        return parsed_time
