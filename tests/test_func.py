@@ -10,6 +10,8 @@ import pathlib
 from my_akshare.datasets import get_ths_js, get_crypto_info_csv
 
 
+
+
 def test_cost_living():
     """
     just for test aim
@@ -37,6 +39,9 @@ def test_zipfile_func():
     """
     temp_path = get_crypto_info_csv("crypto_info.zip")
     assert isinstance(temp_path, pathlib.Path)
+
+
+
 
 
 if __name__ == "__main__":

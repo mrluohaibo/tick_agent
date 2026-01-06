@@ -7,6 +7,9 @@ from utils.mysql_client import TransactionalMySQLClient
 from utils.redis_client import RedisClient
 import logging
 
+from utils.td_genie_client import  TDEngineClient
+
+
 def init_mysql():
     mysql_host = application_conf.get_properties("mysql.host")
     mysql_port = application_conf.get_properties("mysql.port")
@@ -45,11 +48,25 @@ def init_redis():
     redis_client = RedisClient(host=redis_host, port=redis_port, db=redis_db, password=redis_password)
     return redis_client
 
-
+def init_td_engine_client():
+    td_engine_host = application_conf.get_properties("td_engine.host")
+    td_engine_port = application_conf.get_properties("td_engine.port")
+    td_engine_user = application_conf.get_properties("td_engine.user")
+    td_engine_password = application_conf.get_properties("td_engine.password")
+    td_engine_database = application_conf.get_properties("td_engine.database")
+    td_engine_timeout = application_conf.get_properties("td_engine.timeout")
+    td_engine_client = TDEngineClient(host=td_engine_host,
+                                            port=td_engine_port,
+                                            user=td_engine_user,
+                                            password=td_engine_password,
+                                            timeout=td_engine_timeout,
+                                            database=td_engine_database)
+    return td_engine_client
 
 mysql_client = init_mysql()
 mongo_client = init_mongo_db()
 redis_client = init_redis()
+td_engine_client = init_td_engine_client()
 
 
 # 确保日志目录存在

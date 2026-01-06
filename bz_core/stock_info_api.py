@@ -2,6 +2,7 @@ import os
 import time
 
 import my_akshare as ak
+import akshare as remote_ak
 import pandas as pd
 
 from bz_core import Constant
@@ -126,7 +127,7 @@ class StockInfo():
         :return:
         '''
         # 分页获取 股票信息 1229 2124 更新的id
-        last_id = "69526884c52c75ee51f9311c"
+        last_id = ""
         page_size = 1000
         match_doc = mongo_client.get_cursor_paginated_data(self.stock_db_name,query={},last_id = last_id ,page_size = page_size)
         while len(match_doc) > 0:
@@ -177,8 +178,50 @@ class StockInfo():
             logger.error(f"stock {stock_code} not exist,is impossible")
 
 
+    def query_stock_tick_store_db(self,stock_code):
+        '''
+        历史分笔数据
+        每个交易日 16:00 提供当日数据; 如遇到数据缺失, 请使用 ak.stock_zh_a_tick_163() 接口(注意数据会有一定差异)
+        :param stock_code:
+        :return:
+        '''
+        if StringUtil.is_empty(stock_code):
+            logger.error(f"stock {stock_code} not exist,is impossible")
+            raise "股票代码不能为空"
+        if not stock_code.startswith("s"):
+            if stock_code.startswith("6"):
+                stock_code = "sh" + stock_code
+            else :
+                stock_code = "sz" + stock_code
+
+        stock_zh_a_tick_tx_js_df = ak.stock_zh_a_tick_tx_js(symbol=stock_code)
+        date_str = DateTimeUtil.now_time_yyyymmdd()
+        excel_save_file = self.join_path(Constant.root_path, f"temp_file_save/last_stock_tick_{stock_code}_{date_str}.xlsx")
+        stock_zh_a_tick_tx_js_df.to_excel(excel_save_file, index=False)
+        self.store_stock_tick_to_db(stock_code,stock_zh_a_tick_tx_js_df)
+
+    def read_stock_tick_excel_to_db(self,stock_code):
+        if not stock_code.startswith("s"):
+            if stock_code.startswith("6"):
+                stock_code = "sh" + stock_code
+            else :
+                stock_code = "sz" + stock_code
+
+        date_str = DateTimeUtil.now_time_yyyymmdd()
+        excel_save_file = self.join_path(Constant.root_path,
+                                         f"temp_file_save/last_stock_tick_{stock_code}_{date_str}.xlsx")
+
+        df = pd.read_excel(excel_save_file)
+        self.store_stock_tick_to_db(stock_code,df)
+
+    def store_stock_tick_to_db(self, stock_code, stock_zh_a_tick_tx_js_df):
+        pass
+
+
 if __name__ == "__main__":
 
     stock_info = StockInfo()
-    stock_info.update_stock_industry()
+    # stock_info.update_stock_industry()
+    stock_info.read_stock_tick_excel_to_db("601166")
+
     logger.info("-------------ok!!!-------------------------")
