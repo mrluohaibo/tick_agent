@@ -29,7 +29,21 @@ stock_dict_zh_2_en =  {
     "总股本":"total_share_capital",
     "流通股":"floating_shares",
 
+
+
 }
 
 stock_dict_en_2_zh = {v: k for k, v in stock_dict_zh_2_en.items()}
+
+
+stock_tick_dict = {
+    "成交时间": "transaction_time",
+    "成交价格": "transaction_price",
+    "价格变动": "price_change",
+    "成交金额": "transaction_volume",
+    "性质": "nature_type",
+    "成交量": "trading_volume",
+}
+
+stock_tick_dict_en_2_zh = {v: k for k, v in stock_tick_dict.items()}
 

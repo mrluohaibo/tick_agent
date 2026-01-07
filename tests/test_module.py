@@ -5,7 +5,16 @@ class MyTestCase(unittest.TestCase):
     def test_something(self):
         self.assertEqual(True, False)  # add assertion here
 
+    def test_temp1(self):
+        data = [
+            {"name": "Alice", "age": 30, "city": "Beijing"},
+            {"name": "Bob", "age": 25, "city": "Shanghai"}
+        ]
 
+        # 指定字段顺序
+        keys = ["name", "age", "city"]
+        result = [tuple(item[k] for k in keys) for item in data]
+        print(result)
 
     def test_td_engine(self):
         # 使用上下文管理器自动关闭连接
@@ -51,6 +60,7 @@ class MyTestCase(unittest.TestCase):
             rows = client.query("SELECT * FROM meters LIMIT 5")
             for row in rows:
                 print(row)
+
 
 
 if __name__ == '__main__':
