@@ -8,7 +8,7 @@ Desc: 腾讯-股票-实时行情-成交明细
 """
 import time
 
-from utils.HandleLog import  logger
+from utils.logger_config import  logger
 import traceback
 import warnings
 

@@ -6,6 +6,8 @@ from pymongo.collection import Collection
 from pymongo.errors import ConnectionFailure, ServerSelectionTimeoutError
 import logging
 
+from utils.StringUtil import StringUtil
+
 
 class MongoManager:
     """
@@ -155,7 +157,7 @@ class MongoManager:
         """
         from bson import ObjectId
 
-        if last_id:
+        if not StringUtil.is_empty(last_id):
             query['_id'] = {'$gt': ObjectId(last_id)}
 
         cursor = self.get_collection(collection).find(filter=query or {},).sort('_id', 1).limit(page_size)

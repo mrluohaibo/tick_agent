@@ -3,7 +3,7 @@ from contextlib import contextmanager
 
 from taos import TaosConnection
 
-from utils.HandleLog import  logger
+from utils.logger_config import  logger
 
 
 

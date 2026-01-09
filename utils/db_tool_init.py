@@ -1,11 +1,9 @@
-import os
 
-from bz_core.Constant import root_path
 from utils.config_init import application_conf
 from utils.mongo_util import MongoManager
 from utils.mysql_client import TransactionalMySQLClient
 from utils.redis_client import RedisClient
-import logging
+from utils.logger_config import logger
 
 from utils.td_genie_client import  TDEngineClient
 
@@ -69,21 +67,7 @@ redis_client = init_redis()
 td_engine_client = init_td_engine_client()
 
 
-# 确保日志目录存在
-log_dir = os.path.join(root_path, 'logs')  # log_path为存放日志的路径
-os.makedirs(log_dir, exist_ok=True)
 
-# 配置日志：写入文件 + 控制台（可选）
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(os.path.join(log_dir, "app.log"), encoding="utf-8"),
-        logging.StreamHandler()  # 同时输出到控制台（可选）
-    ]
-)
-
-
-logging.info("✔ ✔db  mysql mongo  redis init !!!")
+logger.info("✔ ✔db  mysql mongo  redis init !!!")
 
 

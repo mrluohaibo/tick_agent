@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime,timedelta
 
 class DateTimeUtil(object):
 
@@ -29,3 +29,19 @@ class DateTimeUtil(object):
         # 转换为 UTC 时间戳（秒），再乘以 1000 得到毫秒
         timestamp_ms = int(dt.timestamp() * 1000)
         return timestamp_ms
+
+    @staticmethod
+    def time_add_day(diff:int):
+        now = datetime.now()
+        # 计算前一天
+        add_time = now + timedelta(days=diff)
+
+        # 如果只需要日期部分（ 不包含 时间 ）
+        add_date = add_time.date()
+        return add_date
+
+    @staticmethod
+    def date_to_yyyy_mm_dd_str(date_obj):
+        parsed_time = date_obj.strftime("%Y-%m-%d")
+        return parsed_time
+

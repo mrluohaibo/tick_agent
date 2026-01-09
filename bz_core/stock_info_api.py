@@ -7,16 +7,18 @@ import pandas as pd
 
 from bz_core import Constant
 from bz_core.stock_dict import stock_dict_zh_2_en, stock_tick_dict
-from utils.HandleLog import logger
+from utils.logger_config import logger
 from utils.StringUtil import StringUtil
 from utils.datetime_util import DateTimeUtil
 from utils.db_tool_init import mongo_client, td_engine_client
-
+import baostock as bs
 
 class StockInfo():
 
     def __init__(self):
         self.stock_db_name = "all_stock_basic"
+        self.stock_k_daily_history_db_name = "stock_daily_k_history"
+        self.bs_login = bs.login()
 
     def get_all_stock_info(self):
         '''
@@ -182,6 +184,8 @@ class StockInfo():
         if not stock_code.startswith("s"):
             if stock_code.startswith("6"):
                 stock_code = "sh" + stock_code
+            elif stock_code.startswith("920"):
+                stock_code = "bj" + stock_code
             else:
                 stock_code = "sz" + stock_code
 
@@ -205,6 +209,8 @@ class StockInfo():
         if not stock_code.startswith("s"):
             if stock_code.startswith("6"):
                 stock_code = "sh" + stock_code
+            elif stock_code.startswith("920"):
+                stock_code = "bj" + stock_code
             else:
                 stock_code = "sz" + stock_code
 
@@ -308,10 +314,135 @@ class StockInfo():
                         WHERE ts BETWEEN '{format_date} 00:00:00' AND '{format_date} 23:59:59';
                        """)
 
+    def query_all_stock_history_k_daily_data(self):
+        # 分页获取 股票信息 1229 2124 更新的id
+        last_id = ""
+        page_size = 1000
+        match_doc = mongo_client.get_cursor_paginated_data(self.stock_db_name, query={}, last_id=last_id,
+                                                           page_size=page_size)
+        end_date = DateTimeUtil.date_to_yyyy_mm_dd_str(DateTimeUtil.time_add_day(-1))
+        while len(match_doc) > 0:
+            last_id = match_doc[-1]["_id"]
+            stock_code_list = [item["stock_code"] for item in match_doc]
+            logger.info(f">>> current batch stock code last id is {last_id}")
+            if len(stock_code_list) > 0:
+                for stock_code in stock_code_list:
+                    if not self.check_code_date_exist(stock_code, end_date):
+                        logger.info(f"start query {stock_code} history k daily data")
+                        self.query_history_key_data(stock_code)
+                        logger.info(f"end query {stock_code} history k daily data")
+                if len(match_doc) < page_size: break
+                match_doc = mongo_client.get_cursor_paginated_data(self.stock_db_name, query={}, last_id=last_id,
+                                                                   page_size=page_size)
+
+
+    def query_history_key_data(self,stock_code):
+        '''
+        查询并保存K线数据，北交所暂时不支持
+        :param stock_code:
+        :return:
+        '''
+        # 显示登陆返回信息
+        logger.info('login respond error_code:' + self.bs_login.error_code)
+        logger.info('login respond  error_msg:' + self.bs_login.error_msg)
+        query_stock_code = ""
+        if not stock_code.startswith("s"):
+            if stock_code.startswith("6"):
+                query_stock_code = "sh." + stock_code
+            elif stock_code.startswith("920"):
+                query_stock_code = "bj." + stock_code
+                logger.error(f"not support stock_code:{stock_code} in beijing ")
+                return
+            else:
+                query_stock_code = "sz." + stock_code
+
+
+        #### 获取沪深A股历史K线数据 ####
+        # 详细指标参数，参见“历史行情指标参数”章节；“分钟线”参数与“日线”参数不同。“分钟线”不包含指数。
+        # 分钟线指标：date,time,code,open,high,low,close,volume,amount,adjustflag
+        # 周月线指标：date,code,open,high,low,close,volume,amount,adjustflag,turn,pctChg
+        start_date = '1990-12-19'
+        end_date = DateTimeUtil.date_to_yyyy_mm_dd_str(DateTimeUtil.time_add_day(-1))
+        rs = bs.query_history_k_data_plus(query_stock_code,
+                                          "date,code,open,high,low,close,preclose,volume,amount,adjustflag,turn,tradestatus,pctChg,isST",
+                                          start_date=start_date, end_date=end_date,
+                                          frequency="d", adjustflag="2")
+        logger.info('query_history_k_data_plus respond error_code:' + rs.error_code)
+        logger.info('query_history_k_data_plus respond  error_msg:' + rs.error_msg)
+
+        #### 打印结果集 ####
+        data_list = []
+        while (rs.error_code == '0') & rs.next():
+            # 获取一条记录，将记录合并在一起
+            data_list.append(rs.get_row_data())
+
+        if rs.error_code == '0':
+            result = pd.DataFrame(data_list, columns=rs.fields)
+            csv_save_file = self.join_path(Constant.root_path,
+                                             f"temp_file_save/history_stock_k_daily_data_{stock_code}_{start_date}_{end_date}.csv")
+            #### 结果集输出到excel文件 ####
+            result.to_csv(csv_save_file, index=False)
+            logger.info(f"query stock_code {stock_code} startdate {start_date} enddate {end_date} query data {len(result)}")
+            self.store_stock_k_daily_data(stock_code, start_date, end_date,result)
+        else:
+            logger.error(f"⚠ ⚠ ⚠ ⚠ ⚠ ⚠ error_code {rs.error_code} ,error_msg :{rs.error_msg}")
+
+    def read_stock_k_daily_data(self, stock_code, start_date, end_date):
+
+        # start_date = '1990-12-19'
+        # end_date = '2026-01-08'
+        csv_save_file = self.join_path(Constant.root_path,
+                                       f"temp_file_save/history_stock_k_daily_data_{stock_code}_{start_date}_{end_date}.csv")
+
+        df = pd.read_csv(csv_save_file)
+        self.store_stock_k_daily_data(stock_code, start_date, end_date,df)
+
+
+    def store_stock_k_daily_data(self, stock_code, start_date, end_date, result_df):
+        '''
+         保存数据到mongo
+        :param stock_code:
+        :param start_date:
+        :param end_date:
+        :param result:
+        :return:
+        '''
+        all_data = []
+
+        for index, row in result_df.iterrows():
+            # print(f"行索引: {index}")
+            # print(f"代码: {row['stock_code']}, 名称: {row['stock_name']}")
+            item_row = row.to_dict()
+            item_row['stock_code'] = stock_code
+            all_data.append(item_row)
+
+        self.save_history_k_daily_data_to_mongo(stock_code, all_data)
+
+    def save_history_k_daily_data_to_mongo(self, stock_code, all_data):
+        for per_data in all_data:
+            query = {
+                "stock_code": stock_code,
+                "date": per_data['date'],
+            }
+
+            update_num = mongo_client.update_one(self.stock_k_daily_history_db_name, query=query, update={"$set": per_data},upsert=True)
+            logger.info(f"stock k daily {stock_code},date {per_data["date"]} other info update {update_num}")
+
+    def check_code_date_exist(self, stock_code, end_date):
+        query = {
+            "stock_code": stock_code,
+            "date": end_date,
+        }
+        doc = mongo_client.find_one(self.stock_k_daily_history_db_name, query=query)
+        if doc:
+            return True
+        else:
+            return False
+
 
 if __name__ == "__main__":
     stock_info = StockInfo()
     # stock_info.update_stock_industry()
-    stock_info.query_stock_tick_store_db("601166")
-
+    # stock_info.read_stock_k_daily_data("601166",'1990-12-19',"2026-01-08")
+    stock_info.query_all_stock_history_k_daily_data()
     logger.info("-------------ok!!!-------------------------")
