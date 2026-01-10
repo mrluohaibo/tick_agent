@@ -23,10 +23,10 @@ colors
 .DS_Store
 /data
 /tests/data
-logs
-temp_file_save
-config
+/logs
+/temp_file_save
+/config
 
-temp_part_file
+/temp_part_file
 
-temp_file_save
+/temp_file_save
