@@ -47,3 +47,12 @@ stock_tick_dict = {
 
 stock_tick_dict_en_2_zh = {v: k for k, v in stock_tick_dict.items()}
 
+
+stock_intro_dict = {
+    "主营业务":"primary_business",
+    "产品类型":"product_type",
+    "产品名称":"product_name",
+    "经营范围":"business_scope",
+}
+
+stock_intro_dict_en_2_zh = {v: k for k, v in stock_intro_dict.items()}

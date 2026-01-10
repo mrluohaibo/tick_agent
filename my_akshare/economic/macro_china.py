@@ -342,7 +342,7 @@ def macro_china_urban_unemployment() -> pd.DataFrame:
     date_list = [
         item["wds"][1]["valuecode"] for item in data_json["returndata"]["datanodes"]
     ]
-    temp_df = pd.DataFrame(data_json["returndata"]["wdnodes"][0]["nodes"])
+    temp_df = pd.DataFrame(data_json["returndata"]["wdnodes"][0]["graph"])
     code_item_map = dict(zip(temp_df["code"], temp_df["cname"]))
     temp_df = pd.DataFrame([date_list, name_list, value_list]).T
     temp_df.columns = ["date", "item", "value"]

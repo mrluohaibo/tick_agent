@@ -1,3 +1,4 @@
+import concurrent
 import os
 import time
 
@@ -6,7 +7,8 @@ import akshare as remote_ak
 import pandas as pd
 
 from bz_core import Constant
-from bz_core.stock_dict import stock_dict_zh_2_en, stock_tick_dict
+from bz_core.stock_dict import stock_dict_zh_2_en, stock_tick_dict, stock_intro_dict
+from bz_core.thread_pool_define import handle_daily_stock_data_pool
 from utils.logger_config import logger
 from utils.StringUtil import StringUtil
 from utils.datetime_util import DateTimeUtil
@@ -16,8 +18,13 @@ import baostock as bs
 class StockInfo():
 
     def __init__(self):
+        # 所有股票信息
         self.stock_db_name = "all_stock_basic"
+        # 所有股票日K线数据
         self.stock_k_daily_history_db_name = "stock_daily_k_history"
+
+        self.stock_business_intro = "stock_business_intro"
+        # 显示登陆返回信息
         self.bs_login = bs.login()
 
     def get_all_stock_info(self):
@@ -317,21 +324,35 @@ class StockInfo():
     def query_all_stock_history_k_daily_data(self):
         # 分页获取 股票信息 1229 2124 更新的id
         last_id = ""
-        page_size = 1000
+        page_size = 20
         match_doc = mongo_client.get_cursor_paginated_data(self.stock_db_name, query={}, last_id=last_id,
                                                            page_size=page_size)
         end_date = DateTimeUtil.date_to_yyyy_mm_dd_str(DateTimeUtil.time_add_day(-1))
+
         while len(match_doc) > 0:
             last_id = match_doc[-1]["_id"]
             stock_code_list = [item["stock_code"] for item in match_doc]
-            logger.info(f">>> current batch stock code last id is {last_id}")
+            logger.info(f">>> current batch stock code last id is {last_id} size is {len(stock_code_list)}")
+            start_time = time.time()
             if len(stock_code_list) > 0:
                 for stock_code in stock_code_list:
                     if not self.check_code_date_exist(stock_code, end_date):
                         logger.info(f"start query {stock_code} history k daily data")
                         self.query_history_key_data(stock_code)
                         logger.info(f"end query {stock_code} history k daily data")
-                if len(match_doc) < page_size: break
+
+                # 虽然是“谁先完成谁先处理”，但每次循环仍会阻塞等待下一个完成的任务。
+                # for future in concurrent.futures.as_completed(future_map.keys()):
+                #     try:
+                #         # 获取每个任务的结果
+                #         result = future.result()
+                #         logger.info(f"Task code {future_map[future]} returned {result}")
+                #     except Exception as exc:
+                #         # 如果任务中发生异常，则在这里捕获并处理
+                #         logger.error(f"Task code {future_map[future]}  generated an exception: {exc}")
+                logger.info(f"history k daily data batch size {len(stock_code_list)} spend time:{time.time()*1000 - start_time*1000} ms")
+                if len(match_doc) < page_size:
+                    break
                 match_doc = mongo_client.get_cursor_paginated_data(self.stock_db_name, query={}, last_id=last_id,
                                                                    page_size=page_size)
 
@@ -342,7 +363,7 @@ class StockInfo():
         :param stock_code:
         :return:
         '''
-        # 显示登陆返回信息
+
         logger.info('login respond error_code:' + self.bs_login.error_code)
         logger.info('login respond  error_msg:' + self.bs_login.error_msg)
         query_stock_code = ""
@@ -352,7 +373,7 @@ class StockInfo():
             elif stock_code.startswith("920"):
                 query_stock_code = "bj." + stock_code
                 logger.error(f"not support stock_code:{stock_code} in beijing ")
-                return
+                return None
             else:
                 query_stock_code = "sz." + stock_code
 
@@ -384,8 +405,10 @@ class StockInfo():
             result.to_csv(csv_save_file, index=False)
             logger.info(f"query stock_code {stock_code} startdate {start_date} enddate {end_date} query data {len(result)}")
             self.store_stock_k_daily_data(stock_code, start_date, end_date,result)
+            return True
         else:
             logger.error(f"⚠ ⚠ ⚠ ⚠ ⚠ ⚠ error_code {rs.error_code} ,error_msg :{rs.error_msg}")
+            return False
 
     def read_stock_k_daily_data(self, stock_code, start_date, end_date):
 
@@ -439,10 +462,56 @@ class StockInfo():
         else:
             return False
 
+    def query_stock_intro(self,stock_code):
+        '''
+         主营介绍
+        :param stock_code:
+        :return:
+        '''
+        stock_zyjs_ths_df = ak.stock_zyjs_ths(symbol=stock_code)
+
+        def get_en_code_of_zh_stock_intro_dict(zh_name):
+            head_name_en = stock_intro_dict.get(zh_name, "")
+            if head_name_en == "":
+                logger.error(f"字段 {zh_name} 没有找到对应的en_code")
+            return head_name_en
+
+
+        if len(stock_zyjs_ths_df) > 0:
+            heads = stock_zyjs_ths_df.columns
+            for index, row in stock_zyjs_ths_df.iterrows():
+                # print(f"行索引: {index}")
+                # print(f"代码: {row['stock_code']}, 名称: {row['stock_name']}")
+                item_row = {}
+                has_data = False
+                for head_name in heads:
+                    head_name_en = get_en_code_of_zh_stock_intro_dict(head_name)
+                    if not StringUtil.is_empty(head_name_en):
+                        item_row[head_name_en] = row[head_name]
+                        if not has_data:
+                            item_row["stock_code"] = stock_code
+                            has_data = True
+                if has_data:
+                    self.save_stock_buz_intro(stock_code, item_row)
+
+    def save_stock_buz_intro(self, stock_code, item_row):
+
+        query = {
+            "stock_code": stock_code,
+        }
+        update_num = mongo_client.update_one(self.stock_business_intro, query=query, update={"$set": item_row}, upsert=True)
+        logger.info(f"stock buz intro  {stock_code} other info update {update_num}")
+
+
+
+    def query_news_and_save(self,url):
+        pass
 
 if __name__ == "__main__":
     stock_info = StockInfo()
     # stock_info.update_stock_industry()
     # stock_info.read_stock_k_daily_data("601166",'1990-12-19',"2026-01-08")
-    stock_info.query_all_stock_history_k_daily_data()
+    # stock_info.query_history_key_data("688125")
+    # stock_info.query_all_stock_history_k_daily_data()
+    stock_info.query_stock_intro('601166')
     logger.info("-------------ok!!!-------------------------")

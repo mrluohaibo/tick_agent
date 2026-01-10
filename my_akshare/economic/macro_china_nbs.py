@@ -56,7 +56,7 @@ def _get_nbs_wds_tree(idcode: str, dbcode: str, rowcode: str) -> List[Dict]:
     }
     r = requests.post(url, params=params, verify=False, allow_redirects=True)
     data_json = r.json()
-    data_json = data_json["returndata"][0]["nodes"]
+    data_json = data_json["returndata"][0]["graph"]
     return data_json
 
 
@@ -126,7 +126,7 @@ def macro_china_nbs_nation(
     wn_df_list = []
     for wn in wdnodes:
         wn_df_list.append(
-            pd.DataFrame(wn["nodes"])
+            pd.DataFrame(wn["graph"])
             .assign(
                 funit=lambda df: df["unit"].apply(lambda x: "(" + x + ")" if x else x)
             )
@@ -245,7 +245,7 @@ def macro_china_nbs_region(
     wn_df_list = []
     for wn in wdnodes:
         wn_df_list.append(
-            pd.DataFrame(wn["nodes"])
+            pd.DataFrame(wn["graph"])
             .assign(
                 funit=lambda df: df["unit"].apply(lambda x: "(" + x + ")" if x else x)
             )

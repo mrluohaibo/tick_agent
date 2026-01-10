@@ -157,7 +157,7 @@ class MongoManager:
         """
         from bson import ObjectId
 
-        if not StringUtil.is_empty(last_id):
+        if last_id:
             query['_id'] = {'$gt': ObjectId(last_id)}
 
         cursor = self.get_collection(collection).find(filter=query or {},).sort('_id', 1).limit(page_size)
