@@ -15,6 +15,17 @@ from bz_core.Constant import root_path
 from utils.random_util import RandomUtil
 
 
+
+part_file_dir = os.path.join(root_path, 'temp_part_file')  # 文件保存目录
+os.makedirs(part_file_dir, exist_ok=True)
+
+part_file_html_dir = os.path.join(part_file_dir, 'html')  # html文件保存目录
+os.makedirs(part_file_html_dir, exist_ok=True)
+
+part_file_pic_dir = os.path.join(part_file_dir, 'pic')  # 图片文件保存目录
+os.makedirs(part_file_pic_dir, exist_ok=True)
+
+
 class ScreenShot:
 
     def __init__(self,driver_path = "F:/soft/chromedriver/chromedriver.exe"):
