@@ -4,7 +4,7 @@ from typing import Optional, ClassVar, Type
 from langchain.tools import BaseTool
 import asyncio
 
-from bz_agent.tools.decorators import create_logged_tool
+from .decorators import create_logged_tool
 from utils.page_snapshot import screenShot_tool
 from utils.logger_config import logger
 

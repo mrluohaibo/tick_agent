@@ -70,7 +70,7 @@ def request_url_content_to_markdown(url: str):
         return None
 
 if __name__ == "__main__":
-    print(graph.get_graph().draw_mermaid())
+    # print(graph.get_graph().draw_mermaid())
 
     # user_query = "将网页 https://cj.sina.com.cn/articles/view/2023821012/78a10ed402001rnpw 中的标题+正文 提取出来并以markdown格式输出，注意只返回markdown内容"
     # result = run_agent_workflow(user_input=user_query)
@@ -80,5 +80,5 @@ if __name__ == "__main__":
     #     role = message.type
     #     print(f"\n[{role.upper()}]: {message.content}")
 
-    # result = request_url_content_to_markdown("https://cj.sina.com.cn/articles/view/2023821012/78a10ed402001rnpw")
-    # logger.info(f"Final workflow state: {result}")
+    result = request_url_content_to_markdown("https://cj.sina.com.cn/articles/view/2023821012/78a10ed402001rnpw")
+    logger.info(f"Final workflow state: {result}")

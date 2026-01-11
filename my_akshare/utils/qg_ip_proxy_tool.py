@@ -2,13 +2,13 @@ import requests
 import json
 import traceback
 import logging as logger
-
+from utils.config_init import application_conf
 
 # 青果代理
 class QingguoProxyIp:
     def __init__(self):
-        self.key = "2GB84LAT"
-        self.pwd = "FF283D6217F3"
+        self.key = application_conf.get_properties("ip_proxy.key")
+        self.pwd = application_conf.get_properties("ip_proxy.pwd")
 
 
     def random_proxy_ip_port(self):

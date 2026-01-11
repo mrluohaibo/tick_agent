@@ -11,5 +11,5 @@ __all__ = [
     "write_file_tool",
     "browser_tool",
     "page_html_tool",
-    "read_file_tool"
+    "read_file_tool",
 ]

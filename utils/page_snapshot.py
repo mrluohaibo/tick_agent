@@ -1,5 +1,7 @@
 import os
 import unittest
+
+import requests
 from lxml import etree
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
@@ -9,6 +11,8 @@ from PIL import Image
 from selenium.webdriver.common.by import By
 import io
 import numpy as np
+
+from my_akshare.utils.qg_ip_proxy_tool import QingguoProxyIp
 from utils.logger_config import logger
 
 from bz_core.Constant import root_path
@@ -28,8 +32,9 @@ os.makedirs(part_file_pic_dir, exist_ok=True)
 
 class ScreenShot:
 
-    def __init__(self,driver_path = "F:/soft/chromedriver/chromedriver.exe"):
+    def __init__(self,driver_path = "F:/soft/chromedriver/chromedriver.exe",use_proxy: bool = False):
         self.driver_path = driver_path
+        self.use_proxy =use_proxy
 
     def screen_long_pic(self,driver,out_file):
         # 获得页面总高度
@@ -101,7 +106,46 @@ class ScreenShot:
         driver.close()
         return full_screen
 
-    def get_url_html(self,url):
+    def get_url_html(self,url,use_request: bool=True):
+        if use_request:
+            headers = {
+                "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
+                "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+                "accept-encoding": "gzip, deflate, br",
+                "accept-language": "zh-CN,zh;q=0.9,und;q=0.8,en;q=0.7",
+                "cache-control": "no-cache",
+                "dnt": "1",
+                "pragma": "no-cache",
+            }
+            if self.use_proxy:
+                proxy_ip_port = QingguoProxyIp().random_proxy_ip_port()
+            else:
+                proxy_ip_port = None
+
+            proxies = None
+            if proxy_ip_port is not None:
+                proxies = {
+                    "http": f"http://{proxy_ip_port}"
+                }
+
+            response = requests.get(url,headers=headers,proxies = proxies)
+            logger.info("response code is " + str(response.status_code))
+            if response.status_code == 200:
+                result = response.content.decode(response.apparent_encoding)
+                file_current_name = str(int(time.time() * 1000)) + "_" + RandomUtil.random_char(6) + ".html"
+                file_path = os.path.join(root_path, "temp_part_file/html/" + file_current_name)
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(result)
+                return file_path
+            else:
+                logger.error(f"url {url} response code {response.status_code} then try selenium again")
+                return self.get_url_html_from_selenium(url)
+
+        else:
+            return self.get_url_html_from_selenium(url)
+
+
+    def get_url_html_from_selenium(self,url):
         # chromedriver的路径
 
         # 设置chrome开启的模式，headless就是无界面模式
@@ -122,8 +166,8 @@ class ScreenShot:
         driver.maximize_window()
         html_content = driver.page_source
         driver.close()
-        file_current_name = str(int(time.time()*1000)) + "_"+ RandomUtil.random_char(6) + ".html"
-        file_path = os.path.join(root_path, "temp_part_file/html/"+file_current_name)
+        file_current_name = str(int(time.time() * 1000)) + "_" + RandomUtil.random_char(6) + ".html"
+        file_path = os.path.join(root_path, "temp_part_file/html/" + file_current_name)
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(html_content)
         return file_path

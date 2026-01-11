@@ -12,6 +12,7 @@ from .init_config import (
     VL_BASE_URL,
     VL_API_KEY,
     # Other configurations
+    LOCAL_BASIC_MODEL_PATH,
 )
 
 
@@ -32,5 +33,6 @@ __all__ = [
     "VL_BASE_URL",
     "VL_API_KEY",
     # Other configurations
+    "LOCAL_BASIC_MODEL_PATH",
     "TEAM_MEMBERS",
 ]

@@ -1,6 +1,10 @@
+import os.path
+
 from langchain_openai import ChatOpenAI
 from langchain_deepseek import ChatDeepSeek
 from typing import Optional
+from utils.logger_config import logger
+from bz_agent.agents.qwew_model_stream_init import StreamingLocalQwenChat as LocalQwen
 
 from bz_agent.config.init_config import (
     REASONING_MODEL,
@@ -12,6 +16,7 @@ from bz_agent.config.init_config import (
     VL_MODEL,
     VL_BASE_URL,
     VL_API_KEY,
+    LOCAL_BASIC_MODEL_PATH,
 )
 from bz_agent.config.agents_map import LLMType
 
@@ -60,6 +65,13 @@ def create_deepseek_llm(
     return ChatDeepSeek(**llm_kwargs)
 
 
+def create_local_basic_llm(model_path:str,temperature: float = 0.0):
+
+    # 接入 LangChain
+    llm = LocalQwen(model_path, max_new_tokens=512)
+    return llm
+
+
 # Cache for LLM instances
 _llm_cache: dict[LLMType, ChatOpenAI | ChatDeepSeek] = {}
 
@@ -89,6 +101,12 @@ def get_llm_by_type(llm_type: LLMType) -> ChatOpenAI | ChatDeepSeek:
             base_url=VL_BASE_URL,
             api_key=VL_API_KEY,
         )
+    elif llm_type == "local_basic":
+        temp_path = LOCAL_BASIC_MODEL_PATH
+        if not os.path.exists(temp_path):
+            raise FileNotFoundError(f"未发现LOCAL_BASIC_MODEL_PATH {temp_path} 的路径")
+        llm = create_local_basic_llm(model_path=temp_path)
+
     else:
         raise ValueError(f"Unknown LLM type: {llm_type}")
 
@@ -104,13 +122,15 @@ basic_llm = get_llm_by_type("basic")
 # 多模态模型
 vl_llm = get_llm_by_type("vision")
 
+local_basic_llm = get_llm_by_type("local_basic")
+
 
 if __name__ == "__main__":
-    stream = reasoning_llm.stream("what is mcp?")
+    stream = local_basic_llm.stream("what is mcp?")
     full_response = ""
     for chunk in stream:
         full_response += chunk.content
     print(full_response)
 
-    basic_llm.invoke("Hello")
-    vl_llm.invoke("Hello")
+    # basic_llm.invoke("Hello")
+    # vl_llm.invoke("Hello")

@@ -7,10 +7,14 @@ from bz_core.Constant import root_path
 
 class Config:
     def __init__(self,path):
+        self.path = path
         with open(path, 'r', encoding='utf-8') as f:
             self.config = yaml.safe_load(f)
 
 
+    def refresh(self):
+        with open(self.path, 'r', encoding='utf-8') as f:
+            self.config = yaml.safe_load(f)
 
     def get_properties(self,prop_name):
         '''
