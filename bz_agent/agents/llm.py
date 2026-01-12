@@ -17,6 +17,9 @@ from bz_agent.config.init_config import (
     VL_BASE_URL,
     VL_API_KEY,
     LOCAL_BASIC_MODEL_PATH,
+    LOCAL_BASIC_BASE_URL,
+    LOCAL_BASIC_API_KEY,
+    LOCAL_BASIC_MODEL_NAME,
 )
 from bz_agent.config.agents_map import LLMType
 
@@ -102,10 +105,15 @@ def get_llm_by_type(llm_type: LLMType) -> ChatOpenAI | ChatDeepSeek:
             api_key=VL_API_KEY,
         )
     elif llm_type == "local_basic":
-        temp_path = LOCAL_BASIC_MODEL_PATH
-        if not os.path.exists(temp_path):
-            raise FileNotFoundError(f"未发现LOCAL_BASIC_MODEL_PATH {temp_path} 的路径")
-        llm = create_local_basic_llm(model_path=temp_path)
+        # temp_path = LOCAL_BASIC_MODEL_PATH
+        # if not os.path.exists(temp_path):
+        #     raise FileNotFoundError(f"未发现LOCAL_BASIC_MODEL_PATH {temp_path} 的路径")
+        # llm = create_local_basic_llm(model_path=temp_path)
+        llm = create_openai_llm(
+            model=LOCAL_BASIC_MODEL_NAME,
+            base_url=LOCAL_BASIC_BASE_URL,
+            api_key=LOCAL_BASIC_API_KEY,
+        )
 
     else:
         raise ValueError(f"Unknown LLM type: {llm_type}")

@@ -13,6 +13,10 @@ from .init_config import (
     VL_API_KEY,
     # Other configurations
     LOCAL_BASIC_MODEL_PATH,
+    LOCAL_BASIC_BASE_URL,
+    LOCAL_BASIC_API_KEY,
+    LOCAL_BASIC_MODEL_NAME,
+    LOCAL_BASIC_MODEL_MAXTOKEN,
 )
 
 
@@ -34,5 +38,9 @@ __all__ = [
     "VL_API_KEY",
     # Other configurations
     "LOCAL_BASIC_MODEL_PATH",
+    "LOCAL_BASIC_BASE_URL",
+    "LOCAL_BASIC_API_KEY",
+    "LOCAL_BASIC_MODEL_NAME",
+    "LOCAL_BASIC_MODEL_MAXTOKEN",
     "TEAM_MEMBERS",
 ]

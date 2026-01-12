@@ -12,5 +12,5 @@ AGENT_LLM_MAP: dict[str, LLMType] = {
     "coder": "basic",  # 编程任务使用basic llm
     "browser": "vision",  # 浏览器操作使用vision llm
     "reporter": "basic",  # 编写报告使用basic llm
-    "url_to_markdown": "basic", # 本地还存在点问题，生产环境改成basic
+    "url_to_markdown": "local_basic", # 本地还存在点问题，生产环境改成basic
 }
