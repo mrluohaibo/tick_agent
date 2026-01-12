@@ -28,3 +28,9 @@ td_engine:
   password: 'Luohb123456'
   database: 'stock_tick_info'
   timeout: 30
+
+
+
+ip_proxy:
+    key: ''
+    pwd: ''
