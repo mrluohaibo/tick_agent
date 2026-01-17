@@ -57,7 +57,7 @@ def run_agent_workflow(user_input: str):
 
 
 def request_url_content_to_markdown(url: str):
-    user_query = f"将网页 {url} 中的标题+正文 提取出来并以markdown格式输出，注意只返回markdown内容"
+    user_query = f"将网页 {url} 中的标题+发表时间+正文 提取出来并以markdown格式输出，注意只返回markdown内容"
     result = run_agent_workflow(user_input=user_query)
     if len(result["messages"]) == 0:
         return None

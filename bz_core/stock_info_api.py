@@ -1,12 +1,17 @@
 import concurrent
+import json
 import os
 import time
+from pathlib import PurePath
+
+import requests
 
 import my_akshare as ak
 import akshare as remote_ak
 import pandas as pd
 
 from bz_core import Constant
+from bz_core.Constant import NewsType
 from bz_core.stock_dict import stock_dict_zh_2_en, stock_tick_dict, stock_intro_dict
 from bz_core.thread_pool_define import handle_daily_stock_data_pool
 from utils.logger_config import logger
@@ -37,6 +42,7 @@ class StockInfo():
         logger.info(f" get stock all info spend {time.time() * 1000 - timestamp_before} ms")
         date_str = DateTimeUtil.now_time_yyyymmdd()
         excel_save_file = self.join_path(Constant.root_path, f"temp_file_save/last_stock_info_{date_str}.xlsx")
+        excel_save_file = str(PurePath(excel_save_file).as_posix())
         stock_zh_a_spot_em_df.to_excel(excel_save_file, index=False)
         timestamp_before = time.time() * 1000
         self.handle_stock_pd_data(stock_zh_a_spot_em_df)
@@ -115,6 +121,7 @@ class StockInfo():
     def parse_xlsx_to_pd(self):
         date_str = DateTimeUtil.now_time_yyyymmdd()
         excel_save_file = self.join_path(Constant.root_path, f"temp_file_save/last_stock_info_{date_str}.xlsx")
+        excel_save_file = str(PurePath(excel_save_file).as_posix())
         df = pd.read_excel(excel_save_file)
         self.handle_stock_pd_data(df)
 
@@ -401,6 +408,7 @@ class StockInfo():
             result = pd.DataFrame(data_list, columns=rs.fields)
             csv_save_file = self.join_path(Constant.root_path,
                                              f"temp_file_save/history_stock_k_daily_data_{stock_code}_{start_date}_{end_date}.csv")
+            csv_save_file = str(PurePath(csv_save_file).as_posix())
             #### 结果集输出到excel文件 ####
             result.to_csv(csv_save_file, index=False)
             logger.info(f"query stock_code {stock_code} startdate {start_date} enddate {end_date} query data {len(result)}")
@@ -417,6 +425,7 @@ class StockInfo():
         csv_save_file = self.join_path(Constant.root_path,
                                        f"temp_file_save/history_stock_k_daily_data_{stock_code}_{start_date}_{end_date}.csv")
 
+        csv_save_file = str(PurePath(csv_save_file).as_posix())
         df = pd.read_csv(csv_save_file)
         self.store_stock_k_daily_data(stock_code, start_date, end_date,df)
 
@@ -504,8 +513,9 @@ class StockInfo():
 
 
 
-    def query_news_and_save(self,url):
-        pass
+
+
+
 
 if __name__ == "__main__":
     stock_info = StockInfo()
@@ -513,5 +523,6 @@ if __name__ == "__main__":
     # stock_info.read_stock_k_daily_data("601166",'1990-12-19',"2026-01-08")
     # stock_info.query_history_key_data("688125")
     # stock_info.query_all_stock_history_k_daily_data()
-    stock_info.query_stock_intro('601166')
+    # stock_info.query_stock_intro('601166')
+    # stock_info.query_news_and_save('601166')
     logger.info("-------------ok!!!-------------------------")
