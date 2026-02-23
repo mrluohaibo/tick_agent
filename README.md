@@ -488,11 +488,4 @@ A: 编辑 `config/board_config.yaml` 中的anomaly配置，无需修改代码。
 
 MIT License
 
-## 联系方式
 
-- 项目维护者: Claude Code
-- 问题反馈: [GitHub Issues](https://github.com/your-repo/issues)
-
----
-
-*最后更新: 2026-02-23*
