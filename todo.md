@@ -297,16 +297,16 @@
 
 ---
 
-## Phase 9: 配置文件与日志 ⏳
+## Phase 9: 配置文件与日志 ✅
 
 ### 任务清单
 - [x] 9.1 异动阈值配置 (`config/board_config.yaml`) ✅
-- [ ] 9.2 LLM Agent配置 (`config/agents_config.yaml`)
-- [ ] 9.3 日志增强 (`utils/logger_config.py`)
+- [x] 9.2 LLM Agent配置 (`config/agents_config.yaml`) ✅
+- [x] 9.3 日志增强 (`utils/logger_config.py`) ✅
   - 添加采集、Agent分析操作日志
   - 保留30天
 
-**状态**: 部分完成
+**状态**: 已完成
 
 ---
 
@@ -317,7 +317,7 @@
 |---------|------|------|
 | `config/mysql_schema.sql` | ✅ | MySQL表结构定义 |
 | `config/board_config.yaml` | ✅ | 板块异动配置 |
-| `config/agents_config.yaml` | ⏳ | Agent配置 |
+| `config/agents_config.yaml` | ✅ | Agent配置 |
 | `bz_core/news_collector.py` | ✅ | 财经新闻采集 |
 | `bz_core/board_data_collector.py` | ✅ | 板块基础数据采集 |
 | `bz_core/quote_collector.py` | ✅ | 实时行情采集 |
@@ -325,10 +325,13 @@
 | `bz_agent/graph/sector_nodes.py` | ✅ | 板块监控节点 |
 | `bz_agent/graph/reason_nodes.py` | ✅ | 上涨归因节点 |
 | `bz_agent/graph/report_nodes.py` | ✅ | 报告生成节点 |
+| `bz_agent/prompts/news_agent.md` | ✅ | 新闻解析Prompt |
+| `bz_agent/prompts/report_agent.md` | ✅ | 报告生成Prompt |
 | `scheduler/scheduler.py` | ✅ | 定时任务调度器 |
 | `api/main.py` | ✅ | FastAPI主应用 |
 | `api/websocket.py` | ✅ | WebSocket端点 |
 | `utils/risk_filter.py` | ✅ | 风险过滤模块 |
+| `utils/logger_config.py` | ✅ | 增强的日志配置 |
 
 ### 修改文件
 | 文件路径 | 状态 | 说明 |
@@ -398,14 +401,14 @@
 |-------|--------|--------|--------|--------|------|
 | Phase 1 | 4 | 4 | 0 | 0 | 100% |
 | Phase 2 | 5 | 5 | 0 | 0 | 100% |
-| Phase 3 | 6 | 5 | 0 | 1 | 83% |
+| Phase 3 | 6 | 6 | 0 | 0 | 100% |
 | Phase 4 | 5 | 5 | 0 | 0 | 100% |
 | Phase 5 | 5 | 5 | 0 | 0 | 100% |
 | Phase 6 | 3 | 3 | 0 | 0 | 100% |
-| Phase 7 | 5 | 4 | 0 | 1 | 80% |
-| Phase 8 | 4 | 3 | 0 | 1 | 75% |
-| Phase 9 | 3 | 1 | 0 | 2 | 33% |
-| **总计** | **40** | **35** | **0** | **5** | **87.5%** |
+| Phase 7 | 5 | 5 | 0 | 0 | 100% |
+| Phase 8 | 4 | 4 | 0 | 0 | 100% |
+| Phase 9 | 3 | 3 | 0 | 0 | 100% |
+| **总计** | **40** | **40** | **0** | **0** | **100%** |
 
 ---
 
