@@ -175,9 +175,171 @@ INSERT INTO sh600000 USING stock_tick TAGS ("600000", "sh") VALUES (?,?,?,?,?,?,
 
 ---
 
-## MySQL 数据模型 (预留)
+## MySQL 数据模型
 
-目前未设计具体表结构，预留用于事务性数据处理。
+### 智能板块异动分析系统表结构
+
+#### 1. 板块基础数据表 (Table: `board_basic`)
+
+存储行业/概念板块的基本信息。
+
+**字段结构**:
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| board_name | VARCHAR(100) | 板块名称（主键） |
+| board_type | ENUM | 板块类型: industry=行业, concept=概念 |
+| board_code | VARCHAR(20) | 板块代码 |
+| component_count | INT | 成分股数量 |
+| industry_classification | VARCHAR(100) | 行业分类 |
+| description | TEXT | 板块描述 |
+| create_time | DATETIME | 创建时间 |
+| update_time | DATETIME | 更新时间 |
+
+**索引**:
+- `PRIMARY KEY`: board_name
+- `idx_board_type`: board_type
+- `idx_update_time`: update_time
+
+---
+
+#### 2. 板块实时行情表 (Table: `board_quote_realtime`)
+
+存储板块的实时行情数据，盘中每分钟采集一次。
+
+**字段结构**:
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| id | BIGINT | 自增ID（主键） |
+| board_name | VARCHAR(100) | 板块名称 |
+| quote_time | DATETIME | 行情时间 |
+| change_rate | DECIMAL(10,4) | 涨跌幅(%) |
+| turnover_amount | DECIMAL(20,2) | 成交额(元) |
+| volume_ratio | DECIMAL(10,2) | 量比 |
+| net_inflow | DECIMAL(20,2) | 资金净流入(元) |
+| limit_up_count | INT | 涨停家数 |
+| limit_down_count | INT | 跌停家数 |
+| turnover_rate | DECIMAL(10,4) | 换手率(%) |
+| latest_price | DECIMAL(10,2) | 最新价 |
+| create_time | DATETIME | 创建时间 |
+
+**索引**:
+- `idx_board_time`: board_name, quote_time
+- `idx_quote_time`: quote_time
+- `idx_change_rate`: change_rate
+
+---
+
+#### 3. 板块历史行情表 (Table: `board_quote_history`)
+
+存储板块的历史日行情数据，收盘时归档。
+
+**字段结构**:
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| id | BIGINT | 自增ID（主键） |
+| board_name | VARCHAR(100) | 板块名称 |
+| quote_date | DATE | 行情日期 |
+| open_price | DECIMAL(10,2) | 开盘价 |
+| high_price | DECIMAL(10,2) | 最高价 |
+| low_price | DECIMAL(10,2) | 最低价 |
+| close_price | DECIMAL(10,2) | 收盘价 |
+| change_rate | DECIMAL(10,4) | 涨跌幅(%) |
+| turnover_amount | DECIMAL(20,2) | 成交额(元) |
+| net_inflow | DECIMAL(20,2) | 资金净流入(元) |
+| volume | DECIMAL(20,2) | 成交量 |
+| create_time | DATETIME | 创建时间 |
+
+**索引**:
+- `uk_board_date`: UNIQUE(board_name, quote_date)
+- `idx_quote_date`: quote_date
+- `idx_board_name`: board_name
+
+---
+
+#### 4. 异动板块记录表 (Table: `board_anomaly`)
+
+存储板块异动记录，用于归因分析和报告生成。
+
+**字段结构**:
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| id | BIGINT | 自增ID（主键） |
+| board_name | VARCHAR(100) | 板块名称 |
+| anomaly_time | DATETIME | 异动触发时间 |
+| change_rate | DECIMAL(10,4) | 触发时涨跌幅(%) |
+| turnover_amount | DECIMAL(20,2) | 触发时成交额(元) |
+| volume_ratio | DECIMAL(10,2) | 触发时量比 |
+| net_inflow | DECIMAL(20,2) | 触发时资金净流入(元) |
+| limit_up_count | INT | 触发时涨停家数 |
+| strength_score | DECIMAL(4,2) | 强度评分(0-1) |
+| is_new_anomaly | BOOLEAN | 是否为新异动 |
+| is_processed | BOOLEAN | 是否已处理归因 |
+| processed_time | DATETIME | 处理时间 |
+| create_time | DATETIME | 创建时间 |
+
+**索引**:
+- `idx_anomaly_time`: anomaly_time
+- `idx_board_name`: board_name
+- `idx_is_processed`: is_processed
+- `idx_strength_score`: strength_score
+
+---
+
+#### 5. 板块成分股表 (Table: `board_component`)
+
+存储板块与股票的关联关系。
+
+**字段结构**:
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| id | BIGINT | 自增ID（主键） |
+| board_name | VARCHAR(100) | 板块名称 |
+| stock_code | VARCHAR(20) | 股票代码 |
+| stock_name | VARCHAR(100) | 股票名称 |
+| weight | DECIMAL(10,4) | 权重(%) |
+| add_time | DATETIME | 添加时间 |
+
+**索引**:
+- `uk_board_stock`: UNIQUE(board_name, stock_code)
+- `idx_stock_code`: stock_code
+- `idx_weight`: weight
+
+---
+
+#### 6. 板块资金流向表 (Table: `board_fund_flow`)
+
+存储板块的资金流向历史数据。
+
+**字段结构**:
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| id | BIGINT | 自增ID（主键） |
+| board_name | VARCHAR(100) | 板块名称 |
+| flow_date | DATE | 资金流日期 |
+| main_inflow | DECIMAL(20,2) | 主力净流入(元) |
+| super_large_inflow | DECIMAL(20,2) | 超大单净流入(元) |
+| large_inflow | DECIMAL(20,2) | 大单净流入(元) |
+| medium_inflow | DECIMAL(20,2) | 中单净流入(元) |
+| small_inflow | DECIMAL(20,2) | 小单净流入(元) |
+| main_inflow_ratio | DECIMAL(10,4) | 主力净流入占比(%) |
+| super_large_inflow_ratio | DECIMAL(10,4) | 超大单净流入占比(%) |
+| large_inflow_ratio | DECIMAL(10,4) | 大单净流入占比(%) |
+| medium_inflow_ratio | DECIMAL(10,4) | 中单净流入占比(%) |
+| small_inflow_ratio | DECIMAL(10,4) | 小单净流入占比(%) |
+| create_time | DATETIME | 创建时间 |
+
+**索引**:
+- `uk_board_date`: UNIQUE(board_name, flow_date)
+- `idx_flow_date`: flow_date
+- `idx_main_inflow`: main_inflow
+
+---
 
 **配置** (config/application.yaml):
 ```yaml
@@ -191,11 +353,162 @@ mysql:
 
 **客户端**: `TransactionalMySQLClient` (utils/mysql_client.py)
 
+**初始化SQL**: 见 `config/mysql_schema.sql`
+
 ---
 
-## Redis 数据模型 (预留)
+## MongoDB 数据模型（扩展）
 
-目前未设计具体缓存结构，预留用于热点数据缓存。
+### 4. 新闻事件表 (Collection: `news_events`)
+
+存储结构化新闻事件，用于板块关联和归因分析。
+
+**字段结构**:
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| event_id | String | 事件ID（唯一） |
+| news_title | String | 新闻标题 |
+| news_content | String | 新闻内容 |
+| news_url | String | 新闻链接 |
+| event_type | String | 事件类型: policy/earnings/topic/external |
+| related_sectors | Array[String] | 关联板块列表 |
+| sentiment | String | 情绪标签: positive/negative/neutral |
+| sentiment_score | Float | 情绪强度(0-1) |
+| publish_time | DateTime | 发布时间 |
+| source | String | 新闻来源 |
+| embedding | Array[Float] | 向量嵌入(Phase 1暂不实现) |
+| create_time | DateTime | 创建时间 |
+| update_time | DateTime | 更新时间 |
+
+**索引**:
+- `event_id`: 唯一索引
+- `publish_time`: 按发布时间查询
+- `related_sectors`: 按关联板块查询
+- `event_type`: 按事件类型查询
+- `sentiment`: 按情绪标签查询
+
+---
+
+### 5. 新闻-板块关联映射表 (Collection: `news_sector_mapping`)
+
+存储新闻与板块的多对多关联关系。
+
+**字段结构**:
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| event_id | String | 事件ID |
+| board_name | String | 板块名称 |
+| match_score | Float | 匹配分数(0-1) |
+| match_keywords | Array[String] | 匹配关键词 |
+| create_time | DateTime | 创建时间 |
+
+**索引**:
+- `event_id`: 事件ID索引
+- `board_name`: 板块名称索引
+- `uk_event_board`: UNIQUE(event_id, board_name)
+
+---
+
+### 6. 归因结果表 (Collection: `attribution_result`)
+
+存储板块异动归因分析结果。
+
+**字段结构**:
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| attribution_id | String | 归因ID（唯一） |
+| board_name | String | 板块名称 |
+| anomaly_time | DateTime | 异动时间 |
+ attribution_type | String | 归因类型: policy/fund/earnings/topic/external |
+| reason_description | String | 归因描述 |
+| related_news_ids | Array[String] | 关联新闻ID列表 |
+| confidence_score | Float | 置信度(0-1) |
+| fund_verification | Boolean | 资金流入验证结果 |
+| create_time | DateTime | 创建时间 |
+
+**索引**:
+- `attribution_id`: 唯一索引
+- `board_name`: 板块名称索引
+- `anomaly_time`: 异动时间索引
+- `confidence_score`: 置信度索引
+
+---
+
+## Redis 数据模型
+
+### 缓存键命名规范
+
+#### 1. 板块实时行情缓存
+
+**键格式**: `board:realtime:{board_name}`
+
+**数据类型**: Hash
+
+**字段结构**:
+```
+{
+  "quote_time": "2026-02-23 10:30:00",
+  "change_rate": "3.20",
+  "turnover_amount": "8500000000",
+  "volume_ratio": "1.5",
+  "net_inflow": "300000000",
+  "limit_up_count": "5",
+  "limit_down_count": "0",
+  "turnover_rate": "2.5",
+  "latest_price": "1234.56"
+}
+```
+
+**过期时间**: 5分钟
+
+---
+
+#### 2. 板块异动缓存
+
+**键格式**: `board:anomaly:{board_name}:{date}`
+
+**数据类型**: Hash
+
+**字段结构**:
+```
+{
+  "anomaly_time": "2026-02-23 10:30:00",
+  "change_rate": "3.20",
+  "strength_score": "0.85",
+  "is_processed": "false"
+}
+```
+
+**过期时间**: 24小时
+
+---
+
+#### 3. 领涨板块TOP N缓存
+
+**键格式**: `board:top:{date}:{type}`
+
+其中 `{type}` 可以是 `realtime`(实时) 或 `daily`(日终)
+
+**数据类型**: List
+
+**数据结构**: 按涨幅排序的板块名称列表
+
+**过期时间**: 5分钟 (实时) / 24小时 (日终)
+
+---
+
+#### 4. 新闻事件缓存
+
+**键格式**: `news:event:{event_id}`
+
+**数据类型**: String (JSON)
+
+**过期时间**: 24小时
+
+---
 
 **配置** (config/application.yaml):
 ```yaml
