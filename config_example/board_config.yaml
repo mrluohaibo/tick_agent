@@ -1,0 +1,158 @@
+# ========================================================================
+# 智能股票板块异动分析系统 - 板块异动配置
+# ========================================================================
+
+# 异动判定阈值配置
+anomaly:
+  # 涨跌幅阈值(%)
+  change_rate_threshold: 2.0
+
+  # 成交额阈值(元)
+  turnover_threshold: 500000000
+
+  # 持续时间阈值(分钟)
+  duration_threshold: 2
+
+  # 量比阈值
+  volume_ratio_threshold: 1.5
+
+  # 强度评分权重配置
+  strength_score_weights:
+    change_rate_weight: 0.4  # 涨跌幅权重
+    turnover_weight: 0.3    # 成交额权重
+    limit_up_weight: 0.3    # 涨停家数权重
+
+# 归因分析配置
+attribution:
+  # 时间匹配窗口(分钟)
+  time_match_window: 30
+
+  # 归因类型定义
+  attribution_types:
+    policy: "政策驱动"
+    fund: "资金抱团"
+    earnings: "业绩驱动"
+    topic: "题材发酵"
+    external: "外围传导"
+
+  # 置信度评分规则
+  confidence:
+    high_threshold: 0.8   # 高置信度阈值
+    medium_threshold: 0.5  # 中等置信度阈值
+    low_threshold: 0.4    # 低置信度阈值
+
+# 新闻采集配置
+news:
+  # 新闻来源配置
+  sources:
+    eastmoney: "东方财富"
+    cninfo: "巨潮资讯"
+
+  # 新闻采集频率
+  collection_schedule:
+    pre_market: "08:30"  # 盘前采集时间
+    intraday_interval: 10   # 盘中采集间隔(分钟)
+
+  # 新闻类型
+  news_types:
+    - policy      # 政策新闻
+    - earnings    # 业绩新闻
+    - industry    # 行业新闻
+    - market      # 市场新闻
+
+# 板块数据采集配置
+board:
+  # 板块基础数据采集时间
+  basic_data_schedule: "08:00"
+
+  # 板块类型
+  board_types:
+    - industry   # 行业板块
+    - concept    # 概念板块
+
+  # 成分股更新频率
+  component_update_interval: 24  # 小时
+
+# 行情数据采集配置
+quote:
+  # 交易时间段
+  trading_hours:
+    morning:
+      start: "09:30"
+      end: "11:30"
+    afternoon:
+      start: "13:00"
+      end: "15:00"
+
+  # 盘中采集频率(秒)
+  intraday_interval: 60
+
+  # 收盘归档时间
+  archive_time: "15:30"
+
+  # 数据保留策略
+  retention:
+    realtime_days: 90    # 实时行情保留天数
+    history_days: 730    # 历史行情保留天数
+
+# 报告生成配置
+report:
+  # 盘中快讯生成间隔(分钟)
+  intraday_alert_interval: 10
+
+  # 盘后报告生成时间
+  post_market_time: "15:30"
+
+  # 报告类型
+  report_types:
+    - text        # 文本报告
+    - html        # HTML报告
+    - pdf         # PDF报告
+
+# 风险过滤配置
+risk:
+  # 新闻过滤规则
+  news:
+    max_age_hours: 24         # 最大新闻时效(小时)
+    required_sources:          # 可信来源白名单
+      - "东方财富"
+      - "巨潮资讯"
+      - "证券时报"
+      - "中国证券报"
+      - "上海证券报"
+      - "证券日报"
+      - "新华网"
+      - "人民网"
+
+  # 归因结果过滤
+  attribution:
+    min_confidence: 0.4      # 最低置信度阈值
+
+  # 数据一致性校验
+  data:
+    required_fields:           # 必填字段列表
+      - "board_name"
+      - "quote_time"
+      - "change_rate"
+      - "turnover_amount"
+
+# 实时推送配置
+push:
+  enabled: true
+
+  # WebSocket配置
+  websocket:
+    host: "0.0.0.0"
+    port: 8000
+    path: "/ws/anomaly"
+
+  # 推送消息格式
+  message_types:
+    anomaly_alert: "异动预警"
+    attribution_result: "归因结果"
+    intraday_alert: "盘中快讯"
+
+  # 推送频率限制(秒)
+  rate_limit:
+    anomaly: 60       # 同一板块异动推送最小间隔
+    alert: 600        # 盘中快讯推送间隔

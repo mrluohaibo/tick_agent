@@ -1,0 +1,114 @@
+# ========================================================================
+# 智能股票板块异动分析系统 - Agent配置
+# ========================================================================
+
+# LLM类型定义
+llm_types:
+  reasoning: "reasoning"     # 复杂推理任务（规划、归因）
+  basic: "basic"             # 一般任务（数据验证、简单分析）
+  vision: "vision"           # 视觉任务（浏览器操作）
+  local_basic: "local_basic" # 本地开发测试
+
+# Agent-LLM映射
+agent_llm_map:
+  # 规划Agent
+  planner: "reasoning"
+
+  # 决策Agent
+  supervisor: "basic"
+
+  # 新闻解析Agent
+  news_agent: "basic"
+
+  # 板块监控Agent
+  sector_agent: "basic"
+
+  # 上涨归因Agent
+  reason_agent: "reasoning"
+
+  # 报告生成Agent
+  report_agent: "basic"
+
+  # URL转Markdown Agent
+  url_to_markdown: "basic"
+
+  # 编码Agent
+  coder: "basic"
+
+  # 浏览器Agent
+  browser: "vision"
+
+# Agent配置
+agents:
+  # 新闻解析Agent
+  news_agent:
+    llm_type: "basic"
+    temperature: 0.3
+    max_tokens: 2000
+    retry_times: 3
+    retry_interval: 5
+    enable_vector_storage: false  # Phase 1实现
+
+  # 板块监控Agent
+  sector_agent:
+    llm_type: "basic"
+    temperature: 0.1  # 低温度确保稳定判断
+    max_tokens: 500
+    batch_size: 50  # 每批处理50个板块
+
+  # 上涨归因Agent
+  reason_agent:
+    llm_type: "reasoning"  # 使用推理型LLM
+    temperature: 0.5  # 适中温度允许创造性
+    max_tokens: 3000
+    use_thinking: true  # 启用深度思考模式
+    confidence_threshold: 0.4
+
+  # 报告生成Agent
+  report_agent:
+    llm_type: "basic"
+    temperature: 0.7  # 较高温度使报告更生动
+    max_tokens: 4000
+    report_style: "professional"  # professional/concise/analytical
+
+# 向量数据库配置
+vector_db:
+type: "milvus"  # chromadb/milvus
+  enabled: false  # Phase 1实现后启用
+
+  # Milvus配置
+  milvus:
+    host: "localhost"
+    port: 19530
+    collection_name: "news_events"
+    dimension: 384  # 取决于embedding模型
+
+# 任务执行配置
+execution:
+  # 并发控制
+  max_concurrent_tasks: 10
+  task_timeout: 300  # 单任务超时时间（秒）
+
+  # 内存限制
+  max_memory_mb: 2048
+
+  # 重试策略
+  retry_policy:
+    max_retries: 3
+    retry_delay: 5  # 重试延迟（秒）
+    exponential_backoff: true  # 指数退避
+
+# Agent间通信配置
+communication:
+  # 消息队列
+  enable_message_queue: false
+
+  # 状态共享
+  shared_state_ttl: 3600  # 共享状态存活时间（秒）
+
+# 开发调试配置
+debug:
+  log_agent_thoughts: true  # 记录Agent思考过程
+  log_llm_requests: true    # 记录LLM请求
+  save_intermediate_results: false  # 保存中间结果
+  intermediate_results_dir: "./debug/intermediate"
