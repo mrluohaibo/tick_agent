@@ -1,7 +1,7 @@
 from typing import List, Dict, Any, Optional, Tuple
 from contextlib import contextmanager
 
-from taos import TaosConnection
+from taosws import Connection
 
 from utils.logger_config import  logger
 
@@ -29,7 +29,7 @@ class TDEngineClient:
     def connect(self):
         """建立 TDengine 原生连接"""
         try:
-            self._conn = TaosConnection(
+            self._conn = Connection(
                 host=self.host,
                 port=self.port,
                 user=self.user,

@@ -5,7 +5,9 @@ from utils.mysql_client import TransactionalMySQLClient
 from utils.redis_client import RedisClient
 from utils.logger_config import logger
 
-from utils.td_genie_client import  TDEngineClient
+# 使用Mock版本的TDengine客户端，避免连接问题
+logger.warning("使用Mock版本的TDengine客户端")
+from utils.td_genie_client_mock import TDEngineClient
 
 
 def init_mysql():

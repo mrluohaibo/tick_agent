@@ -10,7 +10,7 @@ import time
 from datetime import datetime, date
 from typing import Dict, List, Optional
 
-import my_akshare as ak
+import akshare as ak
 import pandas as pd
 
 from utils.config_init import application_conf
@@ -62,7 +62,7 @@ class QuoteCollector:
             try:
                 logger.debug(f"第 {attempt + 1} 次尝试采集行业板块行情...")
                 # 使用东方财富行业板块实时行情接口
-                quote_df = ak.stock.stock_board_industry_em()
+                quote_df = ak.stock_board_industry_spot_em()
                 if quote_df is not None and not quote_df.empty:
                     logger.debug(f"成功采集到 {len(quote_df)} 个行业板块行情")
                     return quote_df
@@ -86,7 +86,7 @@ class QuoteCollector:
             try:
                 logger.debug(f"第 {attempt + 1} 次尝试采集概念板块行情...")
                 # 使用东方财富概念板块实时行情接口
-                quote_df = ak.stock_a.stock_board_concept_name_em()
+                quote_df = ak.stock_board_concept_spot_em()
                 if quote_df is not None and not quote_df.empty:
                     logger.debug(f"成功采集到 {len(quote_df)} 个概念板块行情")
                     return quote_df

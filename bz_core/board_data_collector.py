@@ -9,7 +9,7 @@ Desc: 板块基础数据采集模块
 import time
 from typing import Dict, List, Optional
 
-import my_akshare as ak
+import akshare as ak
 import pandas as pd
 
 from utils.config_init import application_conf
@@ -35,7 +35,7 @@ class BoardDataCollector:
             try:
                 logger.info(f"第 {attempt + 1} 次尝试采集行业板块数据...")
                 # 使用东方财富行业板块接口
-                board_df = ak.stock.stock_board_industry_em()
+                board_df = ak.stock_board_industry_name_em()
                 if board_df is not None and not board_df.empty:
                     logger.info(f"成功采集到 {len(board_df)} 个行业板块")
                     return board_df
@@ -60,7 +60,7 @@ class BoardDataCollector:
             try:
                 logger.info(f"第 {attempt + 1} 次尝试采集概念板块数据...")
                 # 使用东方财富概念板块接口
-                board_df = ak.stock_a.stock_board_concept_name_em()
+                board_df = ak.stock_board_concept_name_em()
                 if board_df is not None and not board_df.empty:
                     logger.info(f"成功采集到 {len(board_df)} 个概念板块")
                     return board_df
@@ -154,7 +154,7 @@ class BoardDataCollector:
                 # 根据板块类型选择不同的接口
                 if board_type == 'concept':
                     # 概念板块成分股
-                    components_df = ak.stock_a.stock_board_concept_name_em()
+                    components_df = ak.stock_board_concept_cons_em(symbol=board_name)
                 else:
                     # 行业板块成分股（待实现具体接口）
                     logger.warning(f"行业板块成分股采集接口待实现")

@@ -73,7 +73,7 @@ class LoggerConfig:
 
     def _get_log_level(self):
         """从配置获取日志级别"""
-        level_str = application_conf.get_properties("logging.level", "INFO")
+        level_str = application_conf.get_properties("logging.level") or "INFO"
         return getattr(logging, level_str.upper(), logging.INFO)
 
     def setup_file_handler(self, log_file):

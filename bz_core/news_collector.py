@@ -10,7 +10,13 @@ import time
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 
-import my_akshare as ak
+# 添加项目根目录到Python路径
+import sys
+import os
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+import akshare as ak
 import pandas as pd
 
 from utils.config_init import application_conf
@@ -39,7 +45,7 @@ class NewsCollector:
             try:
                 logger.info(f"第 {attempt + 1} 次尝试采集东方财富新闻...")
                 # 采集东方财富财经新闻
-                news_df = ak.stock.news.news_stock_em()
+                news_df = ak.stock_news_em()
                 if news_df is not None and not news_df.empty:
                     logger.info(f"成功采集到 {len(news_df)} 条新闻")
                     return news_df
@@ -91,11 +97,11 @@ class NewsCollector:
         for _, row in news_df.iterrows():
             try:
                 # 生成事件ID
-                event_id = f"evt_{int(time.time() * 1000)}_{hash(row.get('新闻标题', '')) % 10000}"
+                event_id = f"evt_{int(time.time() * 1000)}_{hash(row.get('标题', '') + row.get('内容', '')) % 10000}"
 
                 # 判断新闻类型（简化版，后续由Agent分析）
-                news_title = row.get('新闻标题', '')
-                news_content = row.get('新闻内容', '')
+                news_title = row.get('标题', '')
+                news_content = row.get('内容', '')
                 publish_time_str = row.get('发布时间', current_time)
 
                 # 解析发布时间

@@ -2,7 +2,25 @@
   "permissions": {
     "allow": [
       "Bash(git add:*)",
-      "Bash(pip install:*)"
+      "Bash(pip install:*)",
+      "Bash(python bz_core/news_collector.py)",
+      "Bash(python -c \"import sys; print\\('\\\\\\\\n'.join\\(sys.path\\)\\)\")",
+      "Bash(python test_news_collector.py)",
+      "Bash(python test_akshare.py)",
+      "Bash(python test_news_collector_fixed.py)",
+      "Bash(python test_board_data_collector.py)",
+      "Bash(python test_quote_collector.py)",
+      "Bash(grep -n \"ak\\\\.\" F:\\\\python_pro\\\\tick_info\\\\bz_core\\\\*.py)",
+      "Bash(python test_all_collectors.py)",
+      "Bash(python -c \"from taos import *; print\\([x for x in dir\\(\\) if 'Connection' in x]\\)\")",
+      "Bash(python -c \"import taos; print\\(dir\\(taos\\)\\)\")",
+      "Bash(python -c \"from taosws import TaosConnection; print\\('TaosConnection found'\\)\")",
+      "Bash(python -c \"from taosws import Connection; print\\('Connection found'\\)\")",
+      "Bash(python test_taos_connection.py)",
+      "Bash(python -c \"from taosws import Connection; help\\(Connection.__init__\\)\")",
+      "Bash(pip list:*)",
+      "Bash(python -c \"from taos import Connection; print\\('taos.Connection works'\\)\")",
+      "Bash(taos --help)"
     ]
   }
 }
