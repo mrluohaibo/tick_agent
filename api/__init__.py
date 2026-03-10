@@ -5,7 +5,7 @@ Date: 2026-02-23
 Desc: API模块
 """
 
-from .websocket import (
+from .websocket_manager import (
     WebSocketManager,
     AnomalyMessage,
     AttributionMessage,

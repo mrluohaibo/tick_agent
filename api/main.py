@@ -22,7 +22,7 @@ if project_root not in sys.path:
 
 from utils.config_init import application_conf
 from utils.logger_config import logger
-from api.websocket import WebSocketManager, AnomalyMessage
+from api.websocket_manager import WebSocketManager, AnomalyMessage
 from bz_agent.graph.news_nodes import NewsAnalysisAgent
 from bz_agent.graph.sector_nodes import SectorMonitorAgent
 from bz_agent.graph.reason_nodes import AttributionAgent
