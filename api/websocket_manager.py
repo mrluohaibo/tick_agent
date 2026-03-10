@@ -7,8 +7,9 @@ Desc: WebSocket连接管理和消息协议定义
 
 import json
 from datetime import datetime
-from typing import List, Dict
+from typing import List, Dict, Optional
 from fastapi import WebSocket, WebSocketDisconnect
+from pydantic import BaseModel, Field
 
 from utils.logger_config import logger
 
@@ -25,94 +26,38 @@ class MessageType:
     SYSTEM_NOTICE = "system_notice"
 
 
-class AnomalyMessage:
+class AnomalyMessage(BaseModel):
     """异动通知消息模型"""
-
-    def __init__(
-        self,
-        board_name: str,
-        change_rate: float,
-        reason: str = "",
-        news_title: str = "",
-        confidence: float = 0.0,
-        trigger_time: str = None
-    ):
-        self.type = MessageType.ANOMALY_ALERT
-        self.data = {
-            "board_name": board_name,
-            "change_rate": change_rate,
-            "reason": reason,
-            "news_title": news_title,
-            "confidence": confidence,
-            "trigger_time": trigger_time or datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        }
-        self.timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    def dict(self) -> Dict:
-        """转换为字典"""
-        return {
-            "type": self.type,
-            "data": self.data,
-            "timestamp": self.timestamp
-        }
+    board_name: str = Field(..., description="板块名称")
+    change_rate: float = Field(..., description="涨跌幅")
+    reason: str = Field(default="", description="异动原因")
+    news_title: str = Field(default="", description="相关新闻标题")
+    confidence: float = Field(default=0.0, description="置信度")
+    trigger_time: Optional[str] = Field(default=None, description="触发时间")
 
 
-class AttributionMessage:
+class AttributionMessage(BaseModel):
     """归因结果消息模型"""
-
-    def __init__(
-        self,
-        board_name: str,
-        attribution_type: str,
-        reason_description: str,
-        confidence: float,
-        related_news: List[str] = None
-    ):
-        self.type = MessageType.ATTRIBUTION_RESULT
-        self.data = {
-            "board_name": board_name,
-            "attribution_type": attribution_type,
-            "reason_description": reason_description,
-            "confidence": confidence,
-            "related_news": related_news or []
-        }
-        self.timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    def dict(self) -> Dict:
-        """转换为字典"""
-        return {
-            "type": self.type,
-            "data": self.data,
-            "timestamp": self.timestamp
-        }
+    board_name: str = Field(..., description="板块名称")
+    attribution_type: str = Field(..., description="归因类型")
+    reason_description: str = Field(..., description="归因描述")
+    confidence: float = Field(..., description="置信度")
+    related_news: List[str] = Field(default_factory=list, description="相关新闻")
 
 
-class IntradayAlertMessage:
+class IntradayAlertMessage(BaseModel):
     """盘中快讯消息模型"""
+    alert_time: str = Field(..., description="预警时间")
+    top_boards: List[Dict] = Field(default_factory=list, description="领涨板块")
+    core_reason: str = Field(default="", description="核心原因")
+    key_news: List[str] = Field(default_factory=list, description="关键新闻")
 
-    def __init__(
-        self,
-        alert_time: str,
-        top_boards: List[Dict],
-        core_reason: str,
-        key_news: List[str] = None
-    ):
-        self.type = MessageType.INTRADAY_ALERT
-        self.data = {
-            "alert_time": alert_time,
-            "top_boards": top_boards,
-            "core_reason": core_reason,
-            "key_news": key_news or []
-        }
-        self.timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    def dict(self) -> Dict:
-        """转换为字典"""
-        return {
-            "type": self.type,
-            "data": self.data,
-            "timestamp": self.timestamp
-        }
+class WSMessage(BaseModel):
+    """通用WebSocket消息"""
+    type: str = Field(..., description="消息类型")
+    data: Dict = Field(default_factory=dict, description="消息数据")
+    timestamp: str = Field(default_factory=lambda: datetime.now().strftime("%Y-%m-%d %H:%M:%S"), description="时间戳")
 
 
 # ========================================================================
@@ -132,15 +77,14 @@ class WebSocketManager:
         logger.info(f"WebSocket连接已建立，当前连接数: {len(self.active_connections)}")
 
         # 发送欢迎消息
-        welcome_msg = {
-            "type": MessageType.SYSTEM_NOTICE,
-            "data": {
+        welcome_msg = WSMessage(
+            type=MessageType.SYSTEM_NOTICE,
+            data={
                 "message": "已连接到智能股票板块异动分析系统",
                 "connection_count": len(self.active_connections)
-            },
-            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        }
-        await websocket.send_json(welcome_msg)
+            }
+        )
+        await websocket.send_json(welcome_msg.dict())
 
     def disconnect(self, websocket: WebSocket):
         """断开连接"""
@@ -148,20 +92,20 @@ class WebSocketManager:
             self.active_connections.remove(websocket)
             logger.info(f"WebSocket连接已断开，当前连接数: {len(self.active_connections)}")
 
-    async def send_personal_message(self, message: Dict, websocket: WebSocket):
+    async def send_personal_message(self, message: WSMessage, websocket: WebSocket):
         """发送个人消息"""
         try:
-            await websocket.send_json(message)
+            await websocket.send_json(message.dict())
         except Exception as e:
             logger.error(f"发送个人消息失败: {e}")
             self.disconnect(websocket)
 
-    async def broadcast(self, message: Dict):
+    async def broadcast(self, message: WSMessage):
         """广播消息给所有连接的客户端"""
         disconnected = []
         for connection in self.active_connections:
             try:
-                await connection.send_json(message)
+                await connection.send_json(message.dict())
             except Exception as e:
                 logger.error(f"广播消息失败: {e}")
                 disconnected.append(connection)
@@ -172,41 +116,47 @@ class WebSocketManager:
 
     async def broadcast_anomaly(self, anomaly_data: Dict):
         """广播异动通知"""
-        message = AnomalyMessage(
-            board_name=anomaly_data.get("board_name", ""),
-            change_rate=anomaly_data.get("change_rate", 0),
-            reason=anomaly_data.get("reason", ""),
-            news_title=anomaly_data.get("news_title", ""),
-            confidence=anomaly_data.get("confidence", 0),
-            trigger_time=anomaly_data.get("trigger_time")
+        message = WSMessage(
+            type=MessageType.ANOMALY_ALERT,
+            data={
+                "board_name": anomaly_data.get("board_name", ""),
+                "change_rate": anomaly_data.get("change_rate", 0),
+                "reason": anomaly_data.get("reason", ""),
+                "news_title": anomaly_data.get("news_title", ""),
+                "confidence": anomaly_data.get("confidence", 0),
+                "trigger_time": anomaly_data.get("trigger_time")
+            }
         )
-
-        await self.broadcast(message.dict())
+        await self.broadcast(message)
         logger.info(f"已广播异动通知: {anomaly_data.get('board_name', '')}")
 
     async def broadcast_attribution(self, attribution_data: Dict):
         """广播归因结果"""
-        message = AttributionMessage(
-            board_name=attribution_data.get("board_name", ""),
-            attribution_type=attribution_data.get("attribution_type", ""),
-            reason_description=attribution_data.get("reason_description", ""),
-            confidence=attribution_data.get("confidence", 0),
-            related_news=attribution_data.get("related_news", [])
+        message = WSMessage(
+            type=MessageType.ATTRIBUTION_RESULT,
+            data={
+                "board_name": attribution_data.get("board_name", ""),
+                "attribution_type": attribution_data.get("attribution_type", ""),
+                "reason_description": attribution_data.get("reason_description", ""),
+                "confidence": attribution_data.get("confidence", 0),
+                "related_news": attribution_data.get("related_news", [])
+            }
         )
-
-        await self.broadcast(message.dict())
+        await self.broadcast(message)
         logger.info(f"已广播归因结果: {attribution_data.get('board_name', '')}")
 
     async def broadcast_intraday_alert(self, alert_data: Dict):
         """广播盘中快讯"""
-        message = IntradayAlertMessage(
-            alert_time=alert_data.get("alert_time", datetime.now().strftime("%H:%M")),
-            top_boards=alert_data.get("top_boards", []),
-            core_reason=alert_data.get("core_reason", ""),
-            key_news=alert_data.get("key_news", [])
+        message = WSMessage(
+            type=MessageType.INTRADAY_ALERT,
+            data={
+                "alert_time": alert_data.get("alert_time", datetime.now().strftime("%H:%M")),
+                "top_boards": alert_data.get("top_boards", []),
+                "core_reason": alert_data.get("core_reason", ""),
+                "key_news": alert_data.get("key_news", [])
+            }
         )
-
-        await self.broadcast(message.dict())
+        await self.broadcast(message)
         logger.info("已广播盘中快讯")
 
     def get_connection_count(self) -> int:

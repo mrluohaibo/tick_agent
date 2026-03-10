@@ -5,11 +5,12 @@ Date: 2026-02-23
 Desc: API模块
 """
 
-from .websocket import (
+from .websocket_manager import (
     WebSocketManager,
     AnomalyMessage,
     AttributionMessage,
     IntradayAlertMessage,
+    WSMessage,
     websocket_manager,
     MessageType
 )
@@ -19,6 +20,7 @@ __all__ = [
     'AnomalyMessage',
     'AttributionMessage',
     'IntradayAlertMessage',
+    'WSMessage',
     'websocket_manager',
     'MessageType'
 ]
