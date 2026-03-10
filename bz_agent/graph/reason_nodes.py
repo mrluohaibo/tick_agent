@@ -7,12 +7,16 @@ Desc: 上涨归因Agent节点
 """
 
 import json
+import os
+import sys
 import time
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.types import Command
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from bz_agent.agents.llm import get_llm_by_type
 from bz_agent.config import application_conf

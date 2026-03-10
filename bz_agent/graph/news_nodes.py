@@ -13,6 +13,10 @@ from typing import Dict, List
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.types import Command
 
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
 from bz_agent.agents.llm import get_llm_by_type
 from bz_agent.graph.types import State
 from utils.logger_config import logger

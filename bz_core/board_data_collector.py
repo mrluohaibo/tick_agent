@@ -9,8 +9,12 @@ Desc: 板块基础数据采集模块
 import time
 from typing import Dict, List, Optional
 
-import my_akshare as ak
+import akshare as ak
 import pandas as pd
+
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils.config_init import application_conf
 from utils.logger_config import logger
@@ -25,6 +29,10 @@ class BoardDataCollector:
         self.retry_times = 3
         self.retry_interval = 10  # seconds
 
+    def run(self) -> Dict[str, int]:
+        """运行板块数据采集（供scheduler调用）"""
+        return self.collect_and_save_boards()
+
     def collect_industry_boards(self) -> pd.DataFrame:
         """
         采集行业板块数据
@@ -35,7 +43,7 @@ class BoardDataCollector:
             try:
                 logger.info(f"第 {attempt + 1} 次尝试采集行业板块数据...")
                 # 使用东方财富行业板块接口
-                board_df = ak.stock.stock_board_industry_em()
+                board_df = ak.stock_board_industry_name_em()
                 if board_df is not None and not board_df.empty:
                     logger.info(f"成功采集到 {len(board_df)} 个行业板块")
                     return board_df
@@ -60,7 +68,7 @@ class BoardDataCollector:
             try:
                 logger.info(f"第 {attempt + 1} 次尝试采集概念板块数据...")
                 # 使用东方财富概念板块接口
-                board_df = ak.stock_a.stock_board_concept_name_em()
+                board_df = ak.stock_board_concept_name_em()
                 if board_df is not None and not board_df.empty:
                     logger.info(f"成功采集到 {len(board_df)} 个概念板块")
                     return board_df
@@ -154,7 +162,7 @@ class BoardDataCollector:
                 # 根据板块类型选择不同的接口
                 if board_type == 'concept':
                     # 概念板块成分股
-                    components_df = ak.stock_a.stock_board_concept_name_em()
+                    components_df = ak.stock_board_concept_cons_em(symbol=board_name)
                 else:
                     # 行业板块成分股（待实现具体接口）
                     logger.warning(f"行业板块成分股采集接口待实现")

@@ -7,11 +7,15 @@ Desc: 板块监控Agent节点
 """
 
 import json
+import os
+import sys
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 
 from langchain_core.messages import HumanMessage
 from langgraph.types import Command
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from bz_agent.config import application_conf
 from bz_agent.graph.types import State

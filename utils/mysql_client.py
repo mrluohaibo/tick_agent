@@ -191,14 +191,14 @@ if __name__ == "__main__":
         autocommit_default=False  # 推荐：让 execute 自身成为一个原子事务
     )
 
-    # ✅ 示例1：单条 execute 自动事务（成功则提交，失败则回滚）
+    # [OK] 示例1：单条 execute 自动事务（成功则提交，失败则回滚）
     try:
         db.execute("INSERT INTO test11 (name, age) VALUES (%s, %s)", ("Tom", 11))
         print("Insert succeeded.")
     except Exception as e:
         print("Insert failed:", e)
 
-    # ✅ 示例2：多语句手动事务
+    # [OK] 示例2：多语句手动事务
     try:
         with db.transaction() as conn:
             db.execute_in_conn(conn, "UPDATE test11 SET age = age - 1 WHERE id = %s", (1,))
@@ -207,6 +207,6 @@ if __name__ == "__main__":
     except Exception as e:
         print("Transfer failed:", e)
 
-    # ✅ 示例3：查询
+    # [OK] 示例3：查询
     users = db.query("SELECT * FROM test11 WHERE name = %s", ("Tom",))
     print(users)
