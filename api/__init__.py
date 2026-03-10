@@ -10,6 +10,7 @@ from .websocket_manager import (
     AnomalyMessage,
     AttributionMessage,
     IntradayAlertMessage,
+    WSMessage,
     websocket_manager,
     MessageType
 )
@@ -19,6 +20,7 @@ __all__ = [
     'AnomalyMessage',
     'AttributionMessage',
     'IntradayAlertMessage',
+    'WSMessage',
     'websocket_manager',
     'MessageType'
 ]
