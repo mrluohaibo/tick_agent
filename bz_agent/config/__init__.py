@@ -19,6 +19,12 @@ from .init_config import (
     LOCAL_BASIC_MODEL_MAXTOKEN,
 )
 
+# Application configuration
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from utils.config_init import application_conf
+
 
 # Team configuration
 TEAM_MEMBERS = ["url_to_markdown", "coder", "browser", "reporter"]

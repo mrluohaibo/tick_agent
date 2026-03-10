@@ -70,9 +70,9 @@ class MongoManager:
         """测试数据库连接"""
         try:
             self._client.admin.command('ping')
-            logging.info("✅ 成功连接到 MongoDB")
+            logging.info("[SUCCESS] 成功连接到 MongoDB")
         except (ConnectionFailure, ServerSelectionTimeoutError) as e:
-            logging.error(f"❌ 无法连接到 MongoDB: {e}")
+            logging.error(f"[ERROR] 无法连接到 MongoDB: {e}")
             raise
 
     @property

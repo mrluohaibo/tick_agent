@@ -34,6 +34,10 @@ class NewsCollector:
         self.retry_times = 3
         self.retry_interval = 10  # seconds
 
+    def run(self) -> Dict[str, int]:
+        """运行新闻采集（供scheduler调用）"""
+        return self.collect_and_save_news()
+
     def collect_news_em(self) -> pd.DataFrame:
         """
         从东方财富采集财经新闻

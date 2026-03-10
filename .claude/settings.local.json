@@ -20,7 +20,23 @@
       "Bash(python -c \"from taosws import Connection; help\\(Connection.__init__\\)\")",
       "Bash(pip list:*)",
       "Bash(python -c \"from taos import Connection; print\\('taos.Connection works'\\)\")",
-      "Bash(taos --help)"
+      "Bash(taos --help)",
+      "Bash(git commit:*)",
+      "Bash(python bz_core/board_data_collector.py)",
+      "Bash(python -c \"import sys; print\\(sys.path\\)\")",
+      "Bash(python -c \"import os; print\\(os.getcwd\\(\\)\\); import sys; sys.path.append\\(os.getcwd\\(\\)\\); import utils.config_init; print\\('utils module imported successfully'\\)\")",
+      "Bash(python bz_core/quote_collector.py)",
+      "Bash(python bz_agent/graph/news_nodes.py)",
+      "Bash(for file:*)",
+      "Bash(python bz_agent/graph/sector_nodes.py)",
+      "Bash(python bz_agent/graph/reason_nodes.py)",
+      "Bash(python bz_agent/graph/report_nodes.py)",
+      "Bash(mysql -h 192.168.99.108 -u root -proot stock_info -e \"DESCRIBE board_quote_realtime;\")",
+      "Bash(timeout 5 python scheduler/scheduler.py 2>&1 || echo \"Scheduler test completed \\(timed out as expected\\)\")",
+      "Bash(timeout 5 python scheduler/scheduler.py 2>&1 || echo \"Scheduler test completed\")",
+      "Bash(python -c \"import os, sys; sys.path.append\\(os.getcwd\\(\\)\\); from utils.config_init import application_conf; print\\('utils module imported successfully'\\)\")",
+      "Bash(python -c \"\nimport os, sys\nfile_path = __file__\nprint\\(f'file_path: {file_path}'\\)\nprint\\(f'abspath: {os.path.abspath\\(file_path\\)}'\\)\nprint\\(f'project_root: {os.path.dirname\\(os.path.dirname\\(os.path.dirname\\(os.path.abspath\\(file_path\\)\\)\\)\\)}'\\)\nprint\\(f'parent of project_root: {os.path.dirname\\(os.path.dirname\\(os.path.dirname\\(os.path.dirname\\(os.path.abspath\\(file_path\\)\\)\\)\\)}'\\)\n\")",
+      "Bash(python -c \"\nimport os, sys\nprint\\('sys.path before:', sys.path[:3]\\)\nsys.path.insert\\(0, '/f/python_pro/tick_info'\\)\nprint\\('sys.path after:', sys.path[:3]\\)\n\")"
     ]
   }
 }

@@ -13,6 +13,10 @@ from typing import Dict, List, Optional
 import akshare as ak
 import pandas as pd
 
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from utils.config_init import application_conf
 from utils.logger_config import logger
 from utils.db_tool_init import mysql_client, redis_client
@@ -25,6 +29,10 @@ class QuoteCollector:
     def __init__(self):
         self.retry_times = 3
         self.retry_interval = 10  # seconds
+
+    def run(self) -> Dict[str, int]:
+        """运行行情采集（供scheduler调用）"""
+        return self.collect_and_save_quotes()
 
     def is_trading_time(self) -> bool:
         """

@@ -30,9 +30,9 @@ class MockTDEngineClient:
         try:
             # 模拟连接成功
             self._conn = "mock_connection"
-            logger.info(f"🔗 Mock TDengine connection established at {self.host}:{self.port}")
+            logger.info(f"[LINK] Mock TDengine connection established at {self.host}:{self.port}")
         except Exception as e:
-            logger.error(f"❌ Mock connection failed: {e}")
+            logger.error(f"[ERROR] Mock connection failed: {e}")
             raise
 
     def close(self):

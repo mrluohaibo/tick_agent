@@ -7,11 +7,15 @@ Desc: 报告生成Agent节点
 """
 
 import json
+import os
+import sys
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.types import Command
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from bz_agent.agents.llm import get_llm_by_type
 from bz_agent.graph.types import State
@@ -90,7 +94,7 @@ class ReportAgent:
             alert_lines = [
                 f"【{time_str} 盘中快讯】",
                 "",
-                "📈 领涨板块TOP3:",
+                "[CHART] 领涨板块TOP3:",
             ]
 
             for i, board in enumerate(top_boards, 1):

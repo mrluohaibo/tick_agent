@@ -37,9 +37,9 @@ class TDEngineClient:
                 database=self.database,
                 timeout=self.timeout,
             )
-            logger.info(f"✅ Connected to TDengine at {self.host}:{self.port}")
+            logger.info(f"[OK] Connected to TDengine at {self.host}:{self.port}")
         except Exception as e:
-            logger.error(f"❌ Failed to connect: {e}")
+            logger.error(f"[ERROR] Failed to connect: {e}")
             raise
 
     def close(self):
@@ -54,7 +54,7 @@ class TDEngineClient:
         try:
             cursor.execute(sql)
             affected = cursor.rowcount
-            logger.debug(f"✅ Executed: {sql} | Affected rows: {affected}")
+            logger.debug(f"[OK] Executed: {sql} | Affected rows: {affected}")
             return affected
         finally:
             cursor.close()
@@ -67,7 +67,7 @@ class TDEngineClient:
             columns = [col[0] for col in cursor.description]
             rows = cursor.fetchall()
             result = [dict(zip(columns, row)) for row in rows]
-            logger.debug(f"✅ Query returned {len(result)} rows")
+            logger.debug(f"[OK] Query returned {len(result)} rows")
             return result
         finally:
             cursor.close()
@@ -81,7 +81,7 @@ class TDEngineClient:
         try:
             cursor.executemany(sql, data)
             affected = cursor.rowcount
-            logger.debug(f"✅ Batch inserted {affected} rows")
+            logger.debug(f"[OK] Batch inserted {affected} rows")
             return affected
         finally:
             cursor.close()
