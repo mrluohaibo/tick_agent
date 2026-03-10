@@ -73,8 +73,8 @@ agents:
 
 # 向量数据库配置
 vector_db:
-type: "milvus"  # chromadb/milvus
-  enabled: false  # Phase 1实现后启用
+  type: "milvus"  # chromadb/milvus
+    enabled: false  # Phase 1实现后启用
 
   # Milvus配置
   milvus:
