@@ -34,3 +34,39 @@ td_engine:
 ip_proxy:
     key: ''
     pwd: ''
+
+
+# Add anomaly section from board_config.yaml
+anomaly:
+  change_rate_threshold: 2.0
+  turnover_threshold: 500000000
+  duration_threshold: 2
+  volume_ratio_threshold: 1.5
+  strength_score_weights:
+    change_rate_weight: 0.4
+    turnover_weight: 0.3
+    limit_up_weight: 0.3
+
+attribution:
+  time_match_window: 30
+  attribution_types:
+    policy: "政策驱动"
+    fund: "资金抱团"
+    earnings: "业绩驱动"
+    topic: "题材发酵"
+    external: "外围传导"
+  confidence:
+    high_threshold: 0.8
+    medium_threshold: 0.5
+    low_threshold: 0.4
+
+risk:
+  news:
+    max_age_hours: 24
+    required_sources:
+      - "东方财富"
+      - "巨潮资讯"
+      - "证券时报"
+      - "中国证券报"
+  attribution:
+    min_confidence: 0.4
